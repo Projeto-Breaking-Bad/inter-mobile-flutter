@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "216179238716",
+    "project_id": "cacatalentosmobile",
+    "storage_bucket": "cacatalentosmobile.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:216179238716:android:e25eaec9d4c94c3d496039",
+        "android_client_info": {
+          "package_name": "com.example.caca_talentos"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "216179238716-k3itq4olqmfsh0388g1rbucg5g10sinl.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDFLVWKQEaMheY7xzn018X8ESMVNf0AsqQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "216179238716-k3itq4olqmfsh0388g1rbucg5g10sinl.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
