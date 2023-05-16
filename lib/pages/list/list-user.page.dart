@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:caca_talentos/pages/home.page.dart';
+import 'package:caca_talentos/pages/profile/company-profile.page.dart';
+import 'package:caca_talentos/pages/profile/user-profile.page.dart';
 
-class UserProfile extends StatelessWidget {
+class ListUser extends StatelessWidget {
   late String nome, email, senha;
 
   getNome(nome) {
@@ -63,12 +65,12 @@ class UserProfile extends StatelessWidget {
             ),
             Positioned.fill(
               child: Container(
-                // margin: EdgeInsets.only(top: 170),
-                margin: EdgeInsets.fromLTRB(10, 30, 10, 30),
+                margin: EdgeInsets.only(top: 30),
                 decoration: BoxDecoration(
                   color: Color.fromARGB(255, 255, 255, 255),
-                  borderRadius: BorderRadius.all(
-                    Radius.circular(20),
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(20),
+                    topRight: Radius.circular(20),
                   ),
                 ),
                 child: Padding(
@@ -90,16 +92,15 @@ class UserProfile extends StatelessWidget {
                           ),
                         ),
                       ),
-
                       Text(
-                        'Perfil do Usuário',
+                        'Lista de Usuários',
                         textAlign: TextAlign.center,
                         overflow: TextOverflow.ellipsis,
                         style: const TextStyle(
                             fontWeight: FontWeight.bold, fontSize: 25),
                       ),
                       Text(
-                        'Perfil de Usuário logado no sistema',
+                        'Lista de Usuários cadastrados no sistema',
                         textAlign: TextAlign.center,
                         overflow: TextOverflow.ellipsis,
                         style: TextStyle(
@@ -110,138 +111,6 @@ class UserProfile extends StatelessWidget {
                       ),
                       SizedBox(
                         height: 15,
-                      ),
-                      TextFormField(
-                        // autofocus: true,
-                        keyboardType: TextInputType.emailAddress,
-                        decoration: InputDecoration(
-                          labelText: "Nome",
-                          prefixIcon: Icon(Icons.people),
-                          labelStyle: TextStyle(
-                            color: Colors.black38,
-                            fontWeight: FontWeight.w400,
-                            fontSize: 17,
-                          ),
-                        ),
-                        onChanged: (String nome) {
-                          getNome(nome);
-                        },
-                        style: TextStyle(fontSize: 17),
-                      ),
-                      SizedBox(
-                        height: 10,
-                      ),
-                      TextFormField(
-                        // autofocus: true,
-                        keyboardType: TextInputType.emailAddress,
-                        decoration: InputDecoration(
-                          labelText: "E-mail",
-                          prefixIcon: Icon(Icons.email),
-                          labelStyle: TextStyle(
-                            color: Colors.black38,
-                            fontWeight: FontWeight.w400,
-                            fontSize: 17,
-                          ),
-                        ),
-                        onChanged: (String email) {
-                          getEmail(email);
-                        },
-                        style: TextStyle(fontSize: 17),
-                      ),
-                      SizedBox(
-                        height: 10,
-                      ),
-                      TextFormField(
-                        // autofocus: true,
-                        keyboardType: TextInputType.text,
-                        obscureText: true,
-                        decoration: InputDecoration(
-                          prefixIcon: Icon(Icons.lock),
-                          labelText: "Senha",
-                          labelStyle: TextStyle(
-                            color: Colors.black38,
-                            fontWeight: FontWeight.w400,
-                            fontSize: 17,
-                          ),
-                        ),
-                        onChanged: (String senha) {
-                          getSenha(senha);
-                        },
-                        style: TextStyle(fontSize: 17),
-                      ),
-                      SizedBox(
-                        height: 40,
-                      ),
-                      Container(
-                        height: 50,
-                        alignment: Alignment.centerLeft,
-                        decoration: BoxDecoration(
-                          gradient: LinearGradient(
-                            begin: Alignment.topLeft,
-                            end: Alignment.bottomRight,
-                            stops: [0.3, 1],
-                            colors: [
-                              Color(0xFFF58524),
-                              Color(0XFFF92B7F),
-                            ],
-                          ),
-                          borderRadius: BorderRadius.all(
-                            Radius.circular(20),
-                          ),
-                        ),
-                        child: SizedBox.expand(
-                          child: TextButton(
-                            child: Text(
-                              "Cadastrar",
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                color: Colors.white,
-                                fontSize: 20,
-                              ),
-                              textAlign: TextAlign.center,
-                            ),
-                            onPressed: () {
-                              updateData();
-                            },
-                          ),
-                        ),
-                      ),
-                      SizedBox(
-                        height: 10,
-                      ),
-                      Container(
-                        height: 50,
-                        alignment: Alignment.centerLeft,
-                        decoration: BoxDecoration(
-                          gradient: LinearGradient(
-                            begin: Alignment.topLeft,
-                            end: Alignment.bottomRight,
-                            stops: [0.3, 1],
-                            colors: [
-                              Color.fromARGB(255, 245, 36, 36),
-                              Color(0XFFF92B7F),
-                            ],
-                          ),
-                          borderRadius: BorderRadius.all(
-                            Radius.circular(20),
-                          ),
-                        ),
-                        child: SizedBox.expand(
-                          child: TextButton(
-                            child: Text(
-                              "Deletar",
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                color: Colors.white,
-                                fontSize: 20,
-                              ),
-                              textAlign: TextAlign.center,
-                            ),
-                            onPressed: () {
-                              deleteData();
-                            },
-                          ),
-                        ),
                       ),
                       Container(
                         padding: EdgeInsets.all(8.0),
@@ -308,11 +177,11 @@ class UserProfile extends StatelessWidget {
                           } else {
                             return const Align(
                               alignment: FractionalOffset.bottomCenter,
-                                child: CircularProgressIndicator(),
-                              );
-                            };
-                          },
-                        ),
+                              child: CircularProgressIndicator(),
+                            );
+                          }
+                        },
+                      ),
                     ],
                   ),
                 ),
@@ -348,7 +217,7 @@ class UserProfile extends StatelessWidget {
             ),
             ListTile(
               leading: Icon(Icons.person),
-              title: const Text('Ver Perfil'),
+              title: const Text('Aluno'),
               onTap: () {
                 Navigator.push(
                   context,
@@ -360,21 +229,33 @@ class UserProfile extends StatelessWidget {
             ),
             ListTile(
               leading: Icon(Icons.work),
-              title: const Text('Ver lista de vagas'),
+              title: const Text('Empresas'),
               onTap: () {
-                Navigator.pop(context);
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => CompanyProfile(),
+                  ),
+                );
               },
             ),
             ListTile(
               leading: Icon(Icons.book),
-              title: const Text('Ver lista de Cursos'),
+              title: const Text('Vagas'),
               onTap: () {
                 Navigator.pop(context);
               },
             ),
             ListTile(
               leading: Icon(Icons.article),
-              title: const Text('Ver noticias'),
+              title: const Text('Cursos'),
+              onTap: () {
+                Navigator.pop(context);
+              },
+            ),
+            ListTile(
+              leading: Icon(Icons.exit_to_app),
+              title: const Text('Sair'),
               onTap: () {
                 Navigator.pop(context);
               },

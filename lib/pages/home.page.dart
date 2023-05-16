@@ -1,5 +1,7 @@
+import 'package:caca_talentos/pages/list/list-user.page.dart';
 import 'package:flutter/material.dart';
-import 'package:caca_talentos/pages/user-profile.page.dart';
+import 'package:caca_talentos/pages/profile/user-profile.page.dart';
+import 'package:caca_talentos/pages/profile/company-profile.page.dart';
 
 class HomePage extends StatelessWidget {
   @override
@@ -22,12 +24,6 @@ class HomePage extends StatelessWidget {
               decoration: BoxDecoration(
                 color: Color(0xFF230B8B),
               ),
-              // child: Text(
-              //   'Menu',
-              //   style: TextStyle(
-              //     color: Colors.white, // Definindo a cor da letra como branca
-              //   ),
-              // ),
               child: Center(
                 child: SizedBox(
                   width: 180,
@@ -37,15 +33,13 @@ class HomePage extends StatelessWidget {
               ),
             ),
             ListTile(
-              leading: Icon(Icons.person),
+              leading: Icon(Icons.home),
               title: const Text('Home'),
-              onTap: () {
-
-              },
+              onTap: () {},
             ),
             ListTile(
               leading: Icon(Icons.person),
-              title: const Text('Ver Perfil'),
+              title: const Text('Alunos'),
               onTap: () {
                 Navigator.push(
                   context,
@@ -57,21 +51,38 @@ class HomePage extends StatelessWidget {
             ),
             ListTile(
               leading: Icon(Icons.work),
-              title: const Text('Ver lista de vagas'),
+              title: const Text('Empresas'),
               onTap: () {
-                Navigator.pop(context);
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => CompanyProfile(),
+                  ),
+                );
               },
             ),
             ListTile(
               leading: Icon(Icons.book),
-              title: const Text('Ver lista de Cursos'),
+              title: const Text('Vagas'),
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => ListUser(),
+                  ),
+                );
+              },
+            ),
+            ListTile(
+              leading: Icon(Icons.article),
+              title: const Text('Cursos'),
               onTap: () {
                 Navigator.pop(context);
               },
             ),
             ListTile(
-              leading: Icon(Icons.article),
-              title: const Text('Ver noticias'),
+              leading: Icon(Icons.exit_to_app),
+              title: const Text('Sair'),
               onTap: () {
                 Navigator.pop(context);
               },
