@@ -1,7 +1,9 @@
 import 'package:caca_talentos/pages/list/list-user.page.dart';
+import 'package:caca_talentos/pages/profile/vacancies-profile.page.dart';
 import 'package:flutter/material.dart';
 import 'package:caca_talentos/pages/profile/user-profile.page.dart';
 import 'package:caca_talentos/pages/profile/company-profile.page.dart';
+import 'package:caca_talentos/pages/profile/course-profile.page.dart';
 
 class HomePage extends StatelessWidget {
   @override
@@ -35,7 +37,14 @@ class HomePage extends StatelessWidget {
             ListTile(
               leading: Icon(Icons.home),
               title: const Text('Home'),
-              onTap: () {},
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => HomePage(),
+                  ),
+                );
+              },
             ),
             ListTile(
               leading: Icon(Icons.person),
@@ -68,7 +77,7 @@ class HomePage extends StatelessWidget {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => ListUser(),
+                    builder: (context) => VacanciesProfile(),
                   ),
                 );
               },
@@ -77,7 +86,12 @@ class HomePage extends StatelessWidget {
               leading: Icon(Icons.article),
               title: const Text('Cursos'),
               onTap: () {
-                Navigator.pop(context);
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => CourseProfile(),
+                  ),
+                );
               },
             ),
             ListTile(

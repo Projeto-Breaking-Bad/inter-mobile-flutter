@@ -1,10 +1,18 @@
+import 'package:caca_talentos/pages/profile/company-profile.page.dart';
+import 'package:caca_talentos/pages/profile/course-profile.page.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:caca_talentos/pages/home.page.dart';
 import 'package:caca_talentos/pages/profile/user-profile.page.dart';
 
 class VacanciesProfile extends StatelessWidget {
-  late String cnpj, areaAtuacao, horas, salario, descricao, requisitos, quantVagas;
+  late String cnpj,
+      areaAtuacao,
+      horas,
+      salario,
+      descricao,
+      requisitos,
+      quantVagas;
 
   getCnpj(cnpj) {
     this.cnpj = cnpj;
@@ -208,7 +216,7 @@ class VacanciesProfile extends StatelessWidget {
                         style: TextStyle(fontSize: 17),
                       ),
                       SizedBox(
-                        height: 40,
+                        height: 10,
                       ),
                       TextFormField(
                         // autofocus: true,
@@ -428,7 +436,7 @@ class VacanciesProfile extends StatelessWidget {
               ),
             ),
             ListTile(
-              leading: Icon(Icons.person),
+              leading: Icon(Icons.home),
               title: const Text('Home'),
               onTap: () {
                 Navigator.push(
@@ -441,7 +449,7 @@ class VacanciesProfile extends StatelessWidget {
             ),
             ListTile(
               leading: Icon(Icons.person),
-              title: const Text('Aluno'),
+              title: const Text('Alunos'),
               onTap: () {
                 Navigator.push(
                   context,
@@ -453,23 +461,38 @@ class VacanciesProfile extends StatelessWidget {
             ),
             ListTile(
               leading: Icon(Icons.work),
-              title: const Text('Ver lista de vagas'),
+              title: const Text('Empresas'),
               onTap: () {
-                Navigator.pop(context);
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => CompanyProfile(),
+                  ),
+                );
               },
             ),
             ListTile(
               leading: Icon(Icons.book),
-              title: const Text('Ver lista de Cursos'),
+              title: const Text('Vagas'),
               onTap: () {
-                Navigator.pop(context);
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => VacanciesProfile(),
+                  ),
+                );
               },
             ),
             ListTile(
               leading: Icon(Icons.article),
-              title: const Text('Ver noticias'),
+              title: const Text('Cursos'),
               onTap: () {
-                Navigator.pop(context);
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => CourseProfile(),
+                  ),
+                );
               },
             ),
             ListTile(

@@ -1,3 +1,5 @@
+import 'package:caca_talentos/pages/profile/course-profile.page.dart';
+import 'package:caca_talentos/pages/profile/vacancies-profile.page.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:caca_talentos/pages/home.page.dart';
@@ -333,7 +335,7 @@ class UserProfile extends StatelessWidget {
               ),
             ),
             ListTile(
-              leading: Icon(Icons.person),
+              leading: Icon(Icons.home),
               title: const Text('Home'),
               onTap: () {
                 Navigator.push(
@@ -346,7 +348,7 @@ class UserProfile extends StatelessWidget {
             ),
             ListTile(
               leading: Icon(Icons.person),
-              title: const Text('Aluno'),
+              title: const Text('Alunos'),
               onTap: () {
                 Navigator.push(
                   context,
@@ -372,14 +374,24 @@ class UserProfile extends StatelessWidget {
               leading: Icon(Icons.book),
               title: const Text('Vagas'),
               onTap: () {
-                Navigator.pop(context);
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => VacanciesProfile(),
+                  ),
+                );
               },
             ),
             ListTile(
               leading: Icon(Icons.article),
               title: const Text('Cursos'),
               onTap: () {
-                Navigator.pop(context);
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => CourseProfile(),
+                  ),
+                );
               },
             ),
             ListTile(

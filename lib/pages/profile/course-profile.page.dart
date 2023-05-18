@@ -1,47 +1,67 @@
-import 'package:caca_talentos/pages/profile/course-profile.page.dart';
-import 'package:caca_talentos/pages/profile/vacancies-profile.page.dart';
+import 'package:caca_talentos/pages/profile/company-profile.page.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:caca_talentos/pages/home.page.dart';
 import 'package:caca_talentos/pages/profile/user-profile.page.dart';
+import 'package:caca_talentos/pages/profile/vacancies-profile.page.dart';
 
-class CompanyProfile extends StatelessWidget {
-  late String nome, email, senha;
+class CourseProfile extends StatelessWidget {
+  late String nomeCurso,
+      horaCurso,
+      compCurriculares,
+      periodoCurso,
+      descricaoCurso,
+      quantVagas;
 
-  getNome(nome) {
-    this.nome = nome;
+  getNomeCurso(nomeCurso) {
+    this.nomeCurso = nomeCurso;
   }
 
-  getEmail(email) {
-    this.email = email;
+  getHoraCurso(horaCurso) {
+    this.horaCurso = horaCurso;
   }
 
-  getSenha(senha) {
-    this.senha = senha;
+  getCompCurriculares(compCurriculares) {
+    this.compCurriculares = compCurriculares;
+  }
+
+  getPeriodoCurso(periodoCurso) {
+    this.periodoCurso = periodoCurso;
+  }
+
+  getDescricaoCurso(descricaoCurso) {
+    this.descricaoCurso = descricaoCurso;
+  }
+
+  getQuantVagas(quantVagas) {
+    this.quantVagas = quantVagas;
   }
 
   updateData() {
     DocumentReference documentReference =
-        FirebaseFirestore.instance.collection("empresa").doc(nome);
+        FirebaseFirestore.instance.collection("curso").doc(nomeCurso);
 
     // create Map
-    Map<String, dynamic> empresas = {
-      "nome": nome,
-      "email": email,
-      "senha": senha,
+    Map<String, dynamic> vagas = {
+      "nomeCurso": nomeCurso,
+      "horaCurso": horaCurso,
+      "compCurriculares": compCurriculares,
+      "periodoCurso": periodoCurso,
+      "descricaoCurso": descricaoCurso,
+      "quantVagas": quantVagas,
     };
 
-    documentReference.set(empresas).whenComplete(() {
-      print("$nome Atualizado com sucesso.");
+    documentReference.set(vagas).whenComplete(() {
+      print("$nomeCurso Atualizado com sucesso.");
     });
   }
 
   deleteData() {
     DocumentReference documentReference =
-        FirebaseFirestore.instance.collection("empresa").doc(nome);
+        FirebaseFirestore.instance.collection("vaga").doc(nomeCurso);
 
     documentReference.delete().whenComplete(() {
-      print("$nome deletado com sucesso.");
+      print("$nomeCurso deletado com sucesso.");
     });
   }
 
@@ -94,14 +114,14 @@ class CompanyProfile extends StatelessWidget {
                         ),
                       ),
                       Text(
-                        'Perfil da Empresa',
+                        'Curso',
                         textAlign: TextAlign.center,
                         overflow: TextOverflow.ellipsis,
                         style: const TextStyle(
                             fontWeight: FontWeight.bold, fontSize: 25),
                       ),
                       Text(
-                        'Perfil da Empresa logado no sistema',
+                        'Divulgue seu curso aqui!',
                         textAlign: TextAlign.center,
                         overflow: TextOverflow.ellipsis,
                         style: TextStyle(
@@ -115,18 +135,18 @@ class CompanyProfile extends StatelessWidget {
                       ),
                       TextFormField(
                         // autofocus: true,
-                        keyboardType: TextInputType.emailAddress,
+                        keyboardType: TextInputType.text,
                         decoration: InputDecoration(
-                          labelText: "Nome da Empresa",
-                          prefixIcon: Icon(Icons.people),
+                          labelText: "Nome do Curso",
+                          prefixIcon: Icon(Icons.card_membership),
                           labelStyle: TextStyle(
                             color: Colors.black38,
                             fontWeight: FontWeight.w400,
                             fontSize: 17,
                           ),
                         ),
-                        onChanged: (String nome) {
-                          getNome(nome);
+                        onChanged: (String nomeCurso) {
+                          getNomeCurso(nomeCurso);
                         },
                         style: TextStyle(fontSize: 17),
                       ),
@@ -135,18 +155,18 @@ class CompanyProfile extends StatelessWidget {
                       ),
                       TextFormField(
                         // autofocus: true,
-                        keyboardType: TextInputType.emailAddress,
+                        keyboardType: TextInputType.text,
                         decoration: InputDecoration(
-                          labelText: "E-mail da Empresa",
-                          prefixIcon: Icon(Icons.email),
+                          labelText: "Horário do Curso",
+                          prefixIcon: Icon(Icons.access_alarm),
                           labelStyle: TextStyle(
                             color: Colors.black38,
                             fontWeight: FontWeight.w400,
                             fontSize: 17,
                           ),
                         ),
-                        onChanged: (String email) {
-                          getEmail(email);
+                        onChanged: (String horaCurso) {
+                          getHoraCurso(horaCurso);
                         },
                         style: TextStyle(fontSize: 17),
                       ),
@@ -158,16 +178,73 @@ class CompanyProfile extends StatelessWidget {
                         keyboardType: TextInputType.text,
                         obscureText: true,
                         decoration: InputDecoration(
-                          prefixIcon: Icon(Icons.lock),
-                          labelText: "Senha",
+                          prefixIcon: Icon(Icons.book),
+                          labelText: "Componentes Curriculares",
                           labelStyle: TextStyle(
                             color: Colors.black38,
                             fontWeight: FontWeight.w400,
                             fontSize: 17,
                           ),
                         ),
-                        onChanged: (String senha) {
-                          getSenha(senha);
+                        onChanged: (String compCurriculares) {
+                          getCompCurriculares(compCurriculares);
+                        },
+                        style: TextStyle(fontSize: 17),
+                      ),
+                      TextFormField(
+                        // autofocus: true,
+                        keyboardType: TextInputType.text,
+                        obscureText: true,
+                        decoration: InputDecoration(
+                          prefixIcon: Icon(Icons.date_range),
+                          labelText: "Período do Curso",
+                          labelStyle: TextStyle(
+                            color: Colors.black38,
+                            fontWeight: FontWeight.w400,
+                            fontSize: 17,
+                          ),
+                        ),
+                        onChanged: (String periodoCurso) {
+                          getPeriodoCurso(periodoCurso);
+                        },
+                        style: TextStyle(fontSize: 17),
+                      ),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      TextFormField(
+                        // autofocus: true,
+                        keyboardType: TextInputType.text,
+                        obscureText: true,
+                        decoration: InputDecoration(
+                          prefixIcon: Icon(Icons.bookmark_add),
+                          labelText: "Descrição do Curso",
+                          labelStyle: TextStyle(
+                            color: Colors.black38,
+                            fontWeight: FontWeight.w400,
+                            fontSize: 17,
+                          ),
+                        ),
+                        onChanged: (String descricaoCurso) {
+                          getDescricaoCurso(descricaoCurso);
+                        },
+                        style: TextStyle(fontSize: 17),
+                      ),
+                      TextFormField(
+                        // autofocus: true,
+                        keyboardType: TextInputType.text,
+                        obscureText: true,
+                        decoration: InputDecoration(
+                          prefixIcon: Icon(Icons.format_list_numbered_rounded),
+                          labelText: "Quantidade de Vagas",
+                          labelStyle: TextStyle(
+                            color: Colors.black38,
+                            fontWeight: FontWeight.w400,
+                            fontSize: 17,
+                          ),
+                        ),
+                        onChanged: (String quantVagas) {
+                          getQuantVagas(quantVagas);
                         },
                         style: TextStyle(fontSize: 17),
                       ),
@@ -250,7 +327,7 @@ class CompanyProfile extends StatelessWidget {
                           children: <Widget>[
                             Expanded(
                               child: Text(
-                                "Nome",
+                                "Nome do Curso",
                                 style: TextStyle(
                                   fontSize: 20,
                                   fontWeight: FontWeight.bold,
@@ -259,7 +336,7 @@ class CompanyProfile extends StatelessWidget {
                             ),
                             Expanded(
                               child: Text(
-                                "E-mail",
+                                "Descrição do Curso",
                                 style: TextStyle(
                                   fontSize: 20,
                                   fontWeight: FontWeight.bold,
@@ -271,7 +348,7 @@ class CompanyProfile extends StatelessWidget {
                       ),
                       StreamBuilder<QuerySnapshot>(
                         stream: FirebaseFirestore.instance
-                            .collection('empresa')
+                            .collection('curso')
                             .snapshots(),
                         builder: (context, snapshot) {
                           if (snapshot.hasData) {
@@ -285,7 +362,7 @@ class CompanyProfile extends StatelessWidget {
                                   children: [
                                     Expanded(
                                       child: Text(
-                                        docSnapshot['nome'].toString(),
+                                        docSnapshot['nomeCurso'].toString(),
                                         style: const TextStyle(
                                           fontSize: 10,
                                           fontWeight: FontWeight.bold,
@@ -294,7 +371,8 @@ class CompanyProfile extends StatelessWidget {
                                     ),
                                     Expanded(
                                       child: Text(
-                                        docSnapshot['email'].toString(),
+                                        docSnapshot['descricaoCurso']
+                                            .toString(),
                                         style: const TextStyle(
                                           fontSize: 10,
                                           fontWeight: FontWeight.bold,
