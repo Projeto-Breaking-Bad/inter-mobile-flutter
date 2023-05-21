@@ -1,10 +1,6 @@
-import 'package:caca_talentos/pages/profile/company-profile.page.dart';
-import 'package:caca_talentos/pages/profile/course-profile.page.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:caca_talentos/pages/home.page.dart';
-import 'package:caca_talentos/pages/profile/user-profile.page.dart';
-
+import 'package:caca_talentos/pages/components/CustomDrawer.dart';
 class VacanciesProfile extends StatelessWidget {
   late String cnpj,
       areaAtuacao,
@@ -422,89 +418,7 @@ class VacanciesProfile extends StatelessWidget {
           ],
         ),
       ),
-      drawer: Drawer(
-        child: ListView(
-          padding: EdgeInsets.zero,
-          children: [
-            DrawerHeader(
-              decoration: BoxDecoration(
-                color: Color(0xFF230B8B),
-              ),
-              child: Image.asset(
-                'assets/cacatalentoswhite.png', // Caminho da imagem do logo
-                height: 60, // Tamanho da imagem
-              ),
-            ),
-            ListTile(
-              leading: Icon(Icons.home),
-              title: const Text('Home'),
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => HomePage(),
-                  ),
-                );
-              },
-            ),
-            ListTile(
-              leading: Icon(Icons.person),
-              title: const Text('Alunos'),
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => UserProfile(),
-                  ),
-                );
-              },
-            ),
-            ListTile(
-              leading: Icon(Icons.work),
-              title: const Text('Empresas'),
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => CompanyProfile(),
-                  ),
-                );
-              },
-            ),
-            ListTile(
-              leading: Icon(Icons.book),
-              title: const Text('Vagas'),
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => VacanciesProfile(),
-                  ),
-                );
-              },
-            ),
-            ListTile(
-              leading: Icon(Icons.article),
-              title: const Text('Cursos'),
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => CourseProfile(),
-                  ),
-                );
-              },
-            ),
-            ListTile(
-              leading: Icon(Icons.exit_to_app),
-              title: const Text('Sair'),
-              onTap: () {
-                Navigator.pop(context);
-              },
-            ),
-          ],
-        ),
-      ),
+            drawer: CustomDrawer(),
     );
   }
 }

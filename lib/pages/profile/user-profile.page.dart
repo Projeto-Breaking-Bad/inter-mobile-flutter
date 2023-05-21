@@ -1,49 +1,64 @@
-import 'package:caca_talentos/pages/profile/course-profile.page.dart';
-import 'package:caca_talentos/pages/profile/vacancies-profile.page.dart';
+import 'package:caca_talentos/pages/components/CustomDrawer.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:caca_talentos/pages/home.page.dart';
-import 'package:caca_talentos/pages/profile/company-profile.page.dart';
 
 class UserProfile extends StatelessWidget {
+  final String cpf;
+  String? updatedCpf;
+
+  UserProfile({required this.cpf});
+
   late String nome, email, senha;
 
-  getNome(nome) {
+  getNome(String nome) {
     this.nome = nome;
   }
 
-  getEmail(email) {
+  getEmail(String email) {
     this.email = email;
   }
 
-  getSenha(senha) {
+  getSenha(String senha) {
     this.senha = senha;
   }
 
+  // updateData() {
+  //   DocumentReference documentReference =
+  //       FirebaseFirestore.instance.collection("aluno").doc(cpf);
+
+  //   // create Map
+  //   Map<String, dynamic> alunos = {
+  //     "nome": nome,
+  //     "email": email,
+  //     "senha": senha,
+  //     "cpf": updatedCpf ?? cpf,
+  //   };
+
+  //   documentReference.set(alunos).whenComplete(() {
+  //     print("$nome Atualizado com sucesso.");
+  //   });
+  // }
+
   updateData() {
-    DocumentReference documentReference =
-        FirebaseFirestore.instance.collection("aluno").doc(nome);
+  DocumentReference documentReference =
+      FirebaseFirestore.instance.collection("aluno").doc(cpf);
 
-    // create Map
-    Map<String, dynamic> alunos = {
-      "nome": nome,
-      "email": email,
-      "senha": senha,
-    };
+  // create Map
+  Map<String, dynamic> alunos = {
+    "nome": nome,
+    "email": email,
+    "senha": senha,
+    "cpf": updatedCpf ?? cpf,
+  };
 
-    documentReference.set(alunos).whenComplete(() {
-      print("$nome Atualizado com sucesso.");
-    });
-  }
+  documentReference.update(alunos).then((_) {
+    print("$nome atualizado com sucesso.");
+  }).catchError((error) {
+    print("Erro ao atualizar $nome: $error");
+  });
+}
 
-  deleteData() {
-    DocumentReference documentReference =
-        FirebaseFirestore.instance.collection("aluno").doc(nome);
-
-    documentReference.delete().whenComplete(() {
-      print("$nome deletado com sucesso.");
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -94,14 +109,14 @@ class UserProfile extends StatelessWidget {
                         ),
                       ),
                       Text(
-                        'Perfil do Usuário',
+                        'Atualizar Perfil',
                         textAlign: TextAlign.center,
                         overflow: TextOverflow.ellipsis,
                         style: const TextStyle(
                             fontWeight: FontWeight.bold, fontSize: 25),
                       ),
                       Text(
-                        'Perfil de Usuário logado no sistema',
+                        'Atualizar Perfil de Usuário logado no sistema',
                         textAlign: TextAlign.center,
                         overflow: TextOverflow.ellipsis,
                         style: TextStyle(
@@ -132,6 +147,24 @@ class UserProfile extends StatelessWidget {
                       ),
                       SizedBox(
                         height: 10,
+                      ),
+                      TextFormField(
+                        // autofocus: true,
+                        keyboardType: TextInputType.number,
+                        decoration: InputDecoration(
+                          labelText: "CPF",
+                          prefixIcon: Icon(Icons.card_membership),
+                          labelStyle: TextStyle(
+                            color: Colors.black38,
+                            fontWeight: FontWeight.w400,
+                            fontSize: 17,
+                          ),
+                        ),
+                        initialValue: cpf,
+                        onChanged: (String updatedCpf) {
+                          this.updatedCpf = updatedCpf;
+                        },
+                        style: TextStyle(fontSize: 17),
                       ),
                       TextFormField(
                         // autofocus: true,
@@ -186,38 +219,6 @@ class UserProfile extends StatelessWidget {
                                 end: Alignment.bottomRight,
                                 stops: [0.3, 1],
                                 colors: [
-                                  Color.fromARGB(255, 245, 36, 36),
-                                  Color(0XFFF92B7F),
-                                ],
-                              ),
-                              borderRadius: BorderRadius.all(
-                                Radius.circular(20),
-                              ),
-                            ),
-                            child: TextButton(
-                              child: Text(
-                                "Deletar",
-                                style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.white,
-                                  fontSize: 20,
-                                ),
-                                textAlign: TextAlign.center,
-                              ),
-                              onPressed: () {
-                                deleteData();
-                              },
-                            ),
-                          ),
-                          Container(
-                            width: 150,
-                            height: 50,
-                            decoration: BoxDecoration(
-                              gradient: LinearGradient(
-                                begin: Alignment.topLeft,
-                                end: Alignment.bottomRight,
-                                stops: [0.3, 1],
-                                colors: [
                                   Color(0xFFF58524),
                                   Color(0XFFF92B7F),
                                 ],
@@ -228,7 +229,7 @@ class UserProfile extends StatelessWidget {
                             ),
                             child: TextButton(
                               child: Text(
-                                "Cadastrar",
+                                "Atualizar",
                                 style: TextStyle(
                                   fontWeight: FontWeight.bold,
                                   color: Colors.white,
@@ -243,76 +244,6 @@ class UserProfile extends StatelessWidget {
                           ),
                         ],
                       ),
-                      Container(
-                        padding: EdgeInsets.all(8.0),
-                        child: Row(
-                          textDirection: TextDirection.ltr,
-                          children: <Widget>[
-                            Expanded(
-                              child: Text(
-                                "Nome",
-                                style: TextStyle(
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ),
-                            Expanded(
-                              child: Text(
-                                "E-mail",
-                                style: TextStyle(
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      StreamBuilder<QuerySnapshot>(
-                        stream: FirebaseFirestore.instance
-                            .collection('aluno')
-                            .snapshots(),
-                        builder: (context, snapshot) {
-                          if (snapshot.hasData) {
-                            return ListView.builder(
-                              shrinkWrap: true,
-                              itemCount: snapshot.data!.docs.length,
-                              itemBuilder: (context, index) {
-                                DocumentSnapshot docSnapshot =
-                                    snapshot.data!.docs[index];
-                                return Row(
-                                  children: [
-                                    Expanded(
-                                      child: Text(
-                                        docSnapshot['nome'].toString(),
-                                        style: const TextStyle(
-                                          fontSize: 10,
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                      ),
-                                    ),
-                                    Expanded(
-                                      child: Text(
-                                        docSnapshot['email'].toString(),
-                                        style: const TextStyle(
-                                          fontSize: 10,
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                );
-                              },
-                            );
-                          } else {
-                            return const Align(
-                              alignment: FractionalOffset.bottomCenter,
-                              child: CircularProgressIndicator(),
-                            );
-                          }
-                        },
-                      ),
                     ],
                   ),
                 ),
@@ -321,89 +252,7 @@ class UserProfile extends StatelessWidget {
           ],
         ),
       ),
-      drawer: Drawer(
-        child: ListView(
-          padding: EdgeInsets.zero,
-          children: [
-            DrawerHeader(
-              decoration: BoxDecoration(
-                color: Color(0xFF230B8B),
-              ),
-              child: Image.asset(
-                'assets/cacatalentoswhite.png', // Caminho da imagem do logo
-                height: 60, // Tamanho da imagem
-              ),
-            ),
-            ListTile(
-              leading: Icon(Icons.home),
-              title: const Text('Home'),
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => HomePage(),
-                  ),
-                );
-              },
-            ),
-            ListTile(
-              leading: Icon(Icons.person),
-              title: const Text('Alunos'),
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => UserProfile(),
-                  ),
-                );
-              },
-            ),
-            ListTile(
-              leading: Icon(Icons.work),
-              title: const Text('Empresas'),
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => CompanyProfile(),
-                  ),
-                );
-              },
-            ),
-            ListTile(
-              leading: Icon(Icons.book),
-              title: const Text('Vagas'),
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => VacanciesProfile(),
-                  ),
-                );
-              },
-            ),
-            ListTile(
-              leading: Icon(Icons.article),
-              title: const Text('Cursos'),
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => CourseProfile(),
-                  ),
-                );
-              },
-            ),
-            ListTile(
-              leading: Icon(Icons.exit_to_app),
-              title: const Text('Sair'),
-              onTap: () {
-                Navigator.pop(context);
-              },
-            ),
-          ],
-        ),
-      ),
+      drawer: CustomDrawer(),
     );
   }
 }

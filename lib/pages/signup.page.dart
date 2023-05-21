@@ -3,10 +3,14 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:caca_talentos/pages/signup-company.page.dart';
 
 class SignupPage extends StatelessWidget {
-  late String nome, email, senha;
+  late String nome, cpf, email, senha;
 
   getNome(nome) {
     this.nome = nome;
+  }
+
+  getCpf(cpf) {
+    this.cpf = cpf;
   }
 
   getEmail(email) {
@@ -19,21 +23,19 @@ class SignupPage extends StatelessWidget {
 
   createData() {
     DocumentReference documentReference =
-        FirebaseFirestore.instance.collection("aluno").doc(nome);
+        FirebaseFirestore.instance.collection("aluno").doc(cpf);
 
     // create Map
     Map<String, dynamic> alunos = {
       "nome": nome,
+      "cpf": cpf,
       "email": email,
       "senha": senha,
     };
 
     documentReference.set(alunos).whenComplete(() {
-      print("$nome cadastrado com sucesso.");
+      print("$cpf cadastrado com sucesso.");
     });
-    // print("Nome: $nome");
-    // print("E-mail: $email");
-    // print("Senha: $senha");
   }
 
   @override
@@ -147,6 +149,26 @@ class SignupPage extends StatelessWidget {
                         ),
                         onChanged: (String nome) {
                           getNome(nome);
+                        },
+                        style: TextStyle(fontSize: 17),
+                      ),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      TextFormField(
+                        // autofocus: true,
+                        keyboardType: TextInputType.number,
+                        decoration: InputDecoration(
+                          labelText: "CPF",
+                          prefixIcon: Icon(Icons.card_membership),
+                          labelStyle: TextStyle(
+                            color: Colors.black38,
+                            fontWeight: FontWeight.w400,
+                            fontSize: 17,
+                          ),
+                        ),
+                        onChanged: (String cpf) {
+                          getCpf(cpf);
                         },
                         style: TextStyle(fontSize: 17),
                       ),

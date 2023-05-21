@@ -1,12 +1,17 @@
+import 'package:caca_talentos/pages/components/CustomDrawer.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:caca_talentos/pages/components/CustomDrawer.dart';
+import 'package:caca_talentos/pages/home.page.dart';
 
-class CompanyProfile extends StatelessWidget {
-  late String nome, email, senha;
+class UserProfileRegister extends StatelessWidget {
+  late String nome, cpf, email, senha;
 
   getNome(nome) {
     this.nome = nome;
+  }
+
+  getCpf(cpf) {
+    this.cpf = cpf;
   }
 
   getEmail(email) {
@@ -17,28 +22,20 @@ class CompanyProfile extends StatelessWidget {
     this.senha = senha;
   }
 
-  updateData() {
+  createData() {
     DocumentReference documentReference =
-        FirebaseFirestore.instance.collection("empresa").doc(nome);
+        FirebaseFirestore.instance.collection("aluno").doc(cpf);
 
     // create Map
-    Map<String, dynamic> empresas = {
+    Map<String, dynamic> alunos = {
       "nome": nome,
+      "cpf": cpf,
       "email": email,
       "senha": senha,
     };
 
-    documentReference.set(empresas).whenComplete(() {
-      print("$nome Atualizado com sucesso.");
-    });
-  }
-
-  deleteData() {
-    DocumentReference documentReference =
-        FirebaseFirestore.instance.collection("empresa").doc(nome);
-
-    documentReference.delete().whenComplete(() {
-      print("$nome deletado com sucesso.");
+    documentReference.set(alunos).whenComplete(() {
+      print("$nome cadastrado com sucesso.");
     });
   }
 
@@ -91,14 +88,14 @@ class CompanyProfile extends StatelessWidget {
                         ),
                       ),
                       Text(
-                        'Perfil da Empresa',
+                        'Cadastrar do Usuário',
                         textAlign: TextAlign.center,
                         overflow: TextOverflow.ellipsis,
                         style: const TextStyle(
                             fontWeight: FontWeight.bold, fontSize: 25),
                       ),
                       Text(
-                        'Perfil da Empresa logado no sistema',
+                        'Cadastrar de Usuário no sistema',
                         textAlign: TextAlign.center,
                         overflow: TextOverflow.ellipsis,
                         style: TextStyle(
@@ -114,7 +111,7 @@ class CompanyProfile extends StatelessWidget {
                         // autofocus: true,
                         keyboardType: TextInputType.emailAddress,
                         decoration: InputDecoration(
-                          labelText: "Nome da Empresa",
+                          labelText: "Nome",
                           prefixIcon: Icon(Icons.people),
                           labelStyle: TextStyle(
                             color: Colors.black38,
@@ -132,9 +129,29 @@ class CompanyProfile extends StatelessWidget {
                       ),
                       TextFormField(
                         // autofocus: true,
+                        keyboardType: TextInputType.number,
+                        decoration: InputDecoration(
+                          labelText: "CPF",
+                          prefixIcon: Icon(Icons.card_membership),
+                          labelStyle: TextStyle(
+                            color: Colors.black38,
+                            fontWeight: FontWeight.w400,
+                            fontSize: 17,
+                          ),
+                        ),
+                        onChanged: (String cpf) {
+                          getCpf(cpf);
+                        },
+                        style: TextStyle(fontSize: 17),
+                      ),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      TextFormField(
+                        // autofocus: true,
                         keyboardType: TextInputType.emailAddress,
                         decoration: InputDecoration(
-                          labelText: "E-mail da Empresa",
+                          labelText: "E-mail",
                           prefixIcon: Icon(Icons.email),
                           labelStyle: TextStyle(
                             color: Colors.black38,
@@ -183,38 +200,6 @@ class CompanyProfile extends StatelessWidget {
                                 end: Alignment.bottomRight,
                                 stops: [0.3, 1],
                                 colors: [
-                                  Color.fromARGB(255, 245, 36, 36),
-                                  Color(0XFFF92B7F),
-                                ],
-                              ),
-                              borderRadius: BorderRadius.all(
-                                Radius.circular(20),
-                              ),
-                            ),
-                            child: TextButton(
-                              child: Text(
-                                "Deletar",
-                                style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.white,
-                                  fontSize: 20,
-                                ),
-                                textAlign: TextAlign.center,
-                              ),
-                              onPressed: () {
-                                deleteData();
-                              },
-                            ),
-                          ),
-                          Container(
-                            width: 150,
-                            height: 50,
-                            decoration: BoxDecoration(
-                              gradient: LinearGradient(
-                                begin: Alignment.topLeft,
-                                end: Alignment.bottomRight,
-                                stops: [0.3, 1],
-                                colors: [
                                   Color(0xFFF58524),
                                   Color(0XFFF92B7F),
                                 ],
@@ -234,81 +219,11 @@ class CompanyProfile extends StatelessWidget {
                                 textAlign: TextAlign.center,
                               ),
                               onPressed: () {
-                                updateData();
+                                createData();
                               },
                             ),
                           ),
                         ],
-                      ),
-                      Container(
-                        padding: EdgeInsets.all(8.0),
-                        child: Row(
-                          textDirection: TextDirection.ltr,
-                          children: <Widget>[
-                            Expanded(
-                              child: Text(
-                                "Nome",
-                                style: TextStyle(
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ),
-                            Expanded(
-                              child: Text(
-                                "E-mail",
-                                style: TextStyle(
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      StreamBuilder<QuerySnapshot>(
-                        stream: FirebaseFirestore.instance
-                            .collection('empresa')
-                            .snapshots(),
-                        builder: (context, snapshot) {
-                          if (snapshot.hasData) {
-                            return ListView.builder(
-                              shrinkWrap: true,
-                              itemCount: snapshot.data!.docs.length,
-                              itemBuilder: (context, index) {
-                                DocumentSnapshot docSnapshot =
-                                    snapshot.data!.docs[index];
-                                return Row(
-                                  children: [
-                                    Expanded(
-                                      child: Text(
-                                        docSnapshot['nome'].toString(),
-                                        style: const TextStyle(
-                                          fontSize: 10,
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                      ),
-                                    ),
-                                    Expanded(
-                                      child: Text(
-                                        docSnapshot['email'].toString(),
-                                        style: const TextStyle(
-                                          fontSize: 10,
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                );
-                              },
-                            );
-                          } else {
-                            return const Align(
-                              alignment: FractionalOffset.bottomCenter,
-                              child: CircularProgressIndicator(),
-                            );
-                          }
-                        },
                       ),
                     ],
                   ),
@@ -318,7 +233,7 @@ class CompanyProfile extends StatelessWidget {
           ],
         ),
       ),
-            drawer: CustomDrawer(),
+      drawer: CustomDrawer(),
     );
   }
 }
