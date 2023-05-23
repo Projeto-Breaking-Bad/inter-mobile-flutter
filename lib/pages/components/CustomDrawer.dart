@@ -1,4 +1,5 @@
 import 'package:caca_talentos/pages/list/list-user.page.dart';
+import 'package:caca_talentos/pages/list/list-company.page.dart';
 import 'package:caca_talentos/pages/home.page.dart';
 import 'package:caca_talentos/pages/profile/vacancies-profile.page.dart';
 import 'package:flutter/material.dart';
@@ -52,7 +53,7 @@ class CustomDrawer extends StatelessWidget {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => CompanyProfile(),
+                  builder: (context) => ListCompany(),
                 ),
               );
             },

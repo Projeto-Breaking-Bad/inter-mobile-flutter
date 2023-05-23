@@ -3,10 +3,14 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:caca_talentos/pages/signup.page.dart';
 
 class SignupCompanyPage extends StatelessWidget {
-  late String nome, email, senha;
+  late String nome, cnpj, email, senha;
 
   getNome(nome) {
     this.nome = nome;
+  }
+
+  getCnpj(cnpj) {
+    this.cnpj = cnpj;
   }
 
   getEmail(email) {
@@ -19,21 +23,19 @@ class SignupCompanyPage extends StatelessWidget {
 
   createData() {
     DocumentReference documentReference =
-        FirebaseFirestore.instance.collection("empresa").doc(nome);
+        FirebaseFirestore.instance.collection("empresa").doc(cnpj);
 
     // create Map
     Map<String, dynamic> empresas = {
       "nome": nome,
+      "cnpj": cnpj,
       "email": email,
       "senha": senha,
     };
 
     documentReference.set(empresas).whenComplete(() {
-      print("$nome cadastrado com sucesso.");
+      print("$cnpj cadastrado com sucesso.");
     });
-    // print("Nome: $nome");
-    // print("E-mail: $email");
-    // print("Senha: $senha");
   }
 
   @override
@@ -95,7 +97,7 @@ class SignupCompanyPage extends StatelessWidget {
                           color: Colors.grey[400],
                         ),
                       ),
-                                            Center(
+                      Center(
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment
                               .center, // alinha os botões no centro horizontal
@@ -138,6 +140,26 @@ class SignupCompanyPage extends StatelessWidget {
                         ),
                         onChanged: (String nome) {
                           getNome(nome);
+                        },
+                        style: TextStyle(fontSize: 17),
+                      ),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      TextFormField(
+                        // autofocus: true,
+                        keyboardType: TextInputType.number,
+                        decoration: InputDecoration(
+                          labelText: "CNPJ",
+                          prefixIcon: Icon(Icons.card_membership_sharp),
+                          labelStyle: TextStyle(
+                            color: Colors.black38,
+                            fontWeight: FontWeight.w400,
+                            fontSize: 17,
+                          ),
+                        ),
+                        onChanged: (String cnpj) {
+                          getCnpj(cnpj);
                         },
                         style: TextStyle(fontSize: 17),
                       ),

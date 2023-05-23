@@ -1,44 +1,41 @@
+import 'package:caca_talentos/pages/components/CustomDrawer.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:caca_talentos/pages/components/CustomDrawer.dart';
-import 'package:caca_talentos/pages/home.page.dart';
+import 'package:caca_talentos/pages/signup.page.dart';
 
-class CompanyProfile extends StatelessWidget {
-  final String cnpj;
-  String? updatedCnpj;
+class CompanyProfileRegister extends StatelessWidget {
+  late String nome, cnpj, email, senha;
 
-  CompanyProfile({required this.cnpj});
-
-  late String nome, email, senha;
-
-  getNome(String nome) {
+  getNome(nome) {
     this.nome = nome;
   }
 
-  getEmail(String email) {
+  getCnpj(cnpj) {
+    this.cnpj = cnpj;
+  }
+
+  getEmail(email) {
     this.email = email;
   }
 
-  getSenha(String senha) {
+  getSenha(senha) {
     this.senha = senha;
   }
 
-  updateData() {
+  createData() {
     DocumentReference documentReference =
         FirebaseFirestore.instance.collection("empresa").doc(cnpj);
 
     // create Map
     Map<String, dynamic> empresas = {
       "nome": nome,
+      "cnpj": cnpj,
       "email": email,
       "senha": senha,
-      "cnpj": updatedCnpj ?? cnpj,
     };
 
-    documentReference.update(empresas).then((_) {
-      print("$nome atualizado com sucesso.");
-    }).catchError((error) {
-      print("Erro ao atualizar $nome: $error");
+    documentReference.set(empresas).whenComplete(() {
+      print("$cnpj cadastrado com sucesso.");
     });
   }
 
@@ -91,14 +88,14 @@ class CompanyProfile extends StatelessWidget {
                         ),
                       ),
                       Text(
-                        'Perfil da Empresa',
+                        'Cadastro de Empresa',
                         textAlign: TextAlign.center,
                         overflow: TextOverflow.ellipsis,
                         style: const TextStyle(
                             fontWeight: FontWeight.bold, fontSize: 25),
-                      ),
+                      ), // adiciona um espaço entre os textos
                       Text(
-                        'Perfil da Empresa logado no sistema',
+                        'Faça seu cadastro aqui.',
                         textAlign: TextAlign.center,
                         overflow: TextOverflow.ellipsis,
                         style: TextStyle(
@@ -108,13 +105,13 @@ class CompanyProfile extends StatelessWidget {
                         ),
                       ),
                       SizedBox(
-                        height: 15,
+                        height: 10,
                       ),
                       TextFormField(
                         // autofocus: true,
                         keyboardType: TextInputType.emailAddress,
                         decoration: InputDecoration(
-                          labelText: "Nome da Empresa",
+                          labelText: "Nome",
                           prefixIcon: Icon(Icons.people),
                           labelStyle: TextStyle(
                             color: Colors.black38,
@@ -135,16 +132,15 @@ class CompanyProfile extends StatelessWidget {
                         keyboardType: TextInputType.number,
                         decoration: InputDecoration(
                           labelText: "CNPJ",
-                          prefixIcon: Icon(Icons.card_travel),
+                          prefixIcon: Icon(Icons.card_membership_sharp),
                           labelStyle: TextStyle(
                             color: Colors.black38,
                             fontWeight: FontWeight.w400,
                             fontSize: 17,
                           ),
                         ),
-                        initialValue: cnpj,
                         onChanged: (String cnpj) {
-                          updatedCnpj = cnpj;
+                          getCnpj(cnpj);
                         },
                         style: TextStyle(fontSize: 17),
                       ),
@@ -192,42 +188,39 @@ class CompanyProfile extends StatelessWidget {
                       SizedBox(
                         height: 40,
                       ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: [
-                          Container(
-                            width: 150,
-                            height: 50,
-                            decoration: BoxDecoration(
-                              gradient: LinearGradient(
-                                begin: Alignment.topLeft,
-                                end: Alignment.bottomRight,
-                                stops: [0.3, 1],
-                                colors: [
-                                  Color(0xFFF58524),
-                                  Color(0XFFF92B7F),
-                                ],
-                              ),
-                              borderRadius: BorderRadius.all(
-                                Radius.circular(20),
-                              ),
-                            ),
-                            child: TextButton(
-                              child: Text(
-                                "Atualizar",
-                                style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.white,
-                                  fontSize: 20,
-                                ),
-                                textAlign: TextAlign.center,
-                              ),
-                              onPressed: () {
-                                updateData();
-                              },
-                            ),
+                      Container(
+                        height: 50,
+                        alignment: Alignment.centerLeft,
+                        decoration: BoxDecoration(
+                          gradient: LinearGradient(
+                            begin: Alignment.topLeft,
+                            end: Alignment.bottomRight,
+                            stops: [0.3, 1],
+                            colors: [
+                              Color(0xFFF58524),
+                              Color(0XFFF92B7F),
+                            ],
                           ),
-                        ],
+                          borderRadius: BorderRadius.all(
+                            Radius.circular(20),
+                          ),
+                        ),
+                        child: SizedBox.expand(
+                          child: TextButton(
+                            child: Text(
+                              "Cadastrar",
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white,
+                                fontSize: 20,
+                              ),
+                              textAlign: TextAlign.center,
+                            ),
+                            onPressed: () {
+                              createData();
+                            },
+                          ),
+                        ),
                       ),
                     ],
                   ),
