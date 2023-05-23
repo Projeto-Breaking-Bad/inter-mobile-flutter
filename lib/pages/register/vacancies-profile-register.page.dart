@@ -1,13 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:caca_talentos/pages/components/CustomDrawer.dart';
-class VacanciesProfile extends StatelessWidget {
-  final String cnpj;
-  String? updatedCnpj;
-
-  VacanciesProfile({required this.cnpj});
-
-  late String
+class VacanciesProfileRegister extends StatelessWidget {
+  late String cnpj,
       areaAtuacao,
       horas,
       salario,
@@ -15,37 +10,41 @@ class VacanciesProfile extends StatelessWidget {
       requisitos,
       quantVagas;
 
-  getAreaAtuacao(String areaAtuacao) {
+  getCnpj(cnpj) {
+    this.cnpj = cnpj;
+  }
+
+  getAreaAtuacao(areaAtuacao) {
     this.areaAtuacao = areaAtuacao;
   }
 
-  getHoras(String horas) {
+  getHoras(horas) {
     this.horas = horas;
   }
 
-  getSalario(String salario) {
+  getSalario(salario) {
     this.salario = salario;
   }
 
-  getDescricao(String descricao) {
+  getDescricao(descricao) {
     this.descricao = descricao;
   }
 
-  getRequisitos(String requisitos) {
+  getRequisitos(requisitos) {
     this.requisitos = requisitos;
   }
 
-  getQuantVagas(String quantVagas) {
+  getQuantVagas(quantVagas) {
     this.quantVagas = quantVagas;
   }
 
-  updateData() {
+  createData() {
     DocumentReference documentReference =
         FirebaseFirestore.instance.collection("vaga").doc(cnpj);
 
     // create Map
     Map<String, dynamic> vagas = {
-      "cnpj": updatedCnpj ?? cnpj,
+      "cnpj": cnpj,
       "areaAtuacao": areaAtuacao,
       "horas": horas,
       "salario": salario,
@@ -54,10 +53,8 @@ class VacanciesProfile extends StatelessWidget {
       "quantVagas": quantVagas,
     };
 
-    documentReference.update(vagas).then((_) {
-      print("$areaAtuacao atualizado com sucesso.");
-    }).catchError((error) {
-      print("Erro ao atualizar $areaAtuacao: $error");
+    documentReference.set(vagas).whenComplete(() {
+      print("$cnpj Cadastrado com sucesso.");
     });
   }
 
@@ -141,9 +138,8 @@ class VacanciesProfile extends StatelessWidget {
                             fontSize: 17,
                           ),
                         ),
-                        initialValue: cnpj,
                         onChanged: (String cnpj) {
-                          updatedCnpj = cnpj;
+                          getCnpj(cnpj);
                         },
                         style: TextStyle(fontSize: 17),
                       ),
@@ -210,6 +206,7 @@ class VacanciesProfile extends StatelessWidget {
                       TextFormField(
                         // autofocus: true,
                         keyboardType: TextInputType.text,
+                        obscureText: true,
                         decoration: InputDecoration(
                           prefixIcon: Icon(Icons.list_alt),
                           labelText: "Requisitos",
@@ -283,7 +280,7 @@ class VacanciesProfile extends StatelessWidget {
                             ),
                             child: TextButton(
                               child: Text(
-                                "Atualizar",
+                                "Cadastrar",
                                 style: TextStyle(
                                   fontWeight: FontWeight.bold,
                                   color: Colors.white,
@@ -292,7 +289,7 @@ class VacanciesProfile extends StatelessWidget {
                                 textAlign: TextAlign.center,
                               ),
                               onPressed: () {
-                                updateData();
+                                createData();
                               },
                             ),
                           ),

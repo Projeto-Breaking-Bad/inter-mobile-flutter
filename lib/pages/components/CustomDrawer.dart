@@ -1,11 +1,12 @@
 import 'package:caca_talentos/pages/list/list-user.page.dart';
 import 'package:caca_talentos/pages/list/list-company.page.dart';
+import 'package:caca_talentos/pages/list/list-vacancies.page.dart';
 import 'package:caca_talentos/pages/home.page.dart';
-import 'package:caca_talentos/pages/profile/vacancies-profile.page.dart';
 import 'package:flutter/material.dart';
 import 'package:caca_talentos/pages/profile/user-profile.page.dart';
 import 'package:caca_talentos/pages/profile/company-profile.page.dart';
 import 'package:caca_talentos/pages/profile/course-profile.page.dart';
+
 class CustomDrawer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -62,7 +63,12 @@ class CustomDrawer extends StatelessWidget {
             leading: Icon(Icons.book),
             title: const Text('Vagas'),
             onTap: () {
-              Navigator.pop(context);
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => ListVacancies(),
+                ),
+              );
             },
           ),
           ListTile(
