@@ -1,3 +1,4 @@
+import 'package:caca_talentos/pages/list/list-course.page.dart';
 import 'package:caca_talentos/pages/list/list-user.page.dart';
 import 'package:caca_talentos/pages/list/list-company.page.dart';
 import 'package:caca_talentos/pages/list/list-vacancies.page.dart';
@@ -75,7 +76,12 @@ class CustomDrawer extends StatelessWidget {
             leading: Icon(Icons.article),
             title: const Text('Cursos'),
             onTap: () {
-              Navigator.pop(context);
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => ListCourse(),
+                ),
+              );
             },
           ),
           ListTile(

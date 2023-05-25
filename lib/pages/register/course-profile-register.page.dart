@@ -2,17 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:caca_talentos/pages/components/CustomDrawer.dart';
 
-class CourseProfile extends StatelessWidget {
-  final String nomeCurso;
-  String? updatedNomeCurso;
-
-  CourseProfile({required this.nomeCurso});
-
-  late String horaCurso,
+class CourseProfileRegister extends StatelessWidget {
+  late String nomeCurso,
+      horaCurso,
       compCurriculares,
       periodoCurso,
       descricaoCurso,
       quantVagas;
+
+  getNomeCurso(String nomeCurso) {
+    this.nomeCurso = nomeCurso;
+  }
 
   getHoraCurso(String horaCurso) {
     this.horaCurso = horaCurso;
@@ -34,13 +34,13 @@ class CourseProfile extends StatelessWidget {
     this.quantVagas = quantVagas;
   }
 
-  updateData() {
+  createData() {
     DocumentReference documentReference =
         FirebaseFirestore.instance.collection("curso").doc(nomeCurso);
 
     // create Map
-    Map<String, dynamic> vagas = {
-      "nomeCurso": updatedNomeCurso ?? nomeCurso,
+    Map<String, dynamic> cursos = {
+      "nomeCurso": nomeCurso,
       "horaCurso": horaCurso,
       "compCurriculares": compCurriculares,
       "periodoCurso": periodoCurso,
@@ -48,10 +48,10 @@ class CourseProfile extends StatelessWidget {
       "quantVagas": quantVagas,
     };
 
-    documentReference.set(vagas).then((_) {
-      print("$nomeCurso atualizado com sucesso.");
+    documentReference.set(cursos).then((_) {
+      print("$nomeCurso cadastrar com sucesso.");
     }).catchError((error) {
-      print("Erro ao atualizar $nomeCurso: $error");
+      print("Erro ao cadastrar $nomeCurso: $error");
     });
   }
 
@@ -135,9 +135,8 @@ class CourseProfile extends StatelessWidget {
                             fontSize: 17,
                           ),
                         ),
-                        initialValue: nomeCurso,
-                        onChanged: (String updatedNomeCurso) {
-                          this.updatedNomeCurso = updatedNomeCurso;
+                        onChanged: (String nomeCurso) {
+                          getNomeCurso(nomeCurso);
                         },
                         style: TextStyle(fontSize: 17),
                       ),
@@ -260,7 +259,7 @@ class CourseProfile extends StatelessWidget {
                             ),
                             child: TextButton(
                               child: Text(
-                                "Atualizar",
+                                "Cadastrar",
                                 style: TextStyle(
                                   fontWeight: FontWeight.bold,
                                   color: Colors.white,
@@ -269,7 +268,7 @@ class CourseProfile extends StatelessWidget {
                                 textAlign: TextAlign.center,
                               ),
                               onPressed: () {
-                                updateData();
+                                createData();
                               },
                             ),
                           ),
