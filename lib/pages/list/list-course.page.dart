@@ -282,7 +282,7 @@ class ListCourse extends StatelessWidget {
           ],
         ),
       ),
-      drawer: CustomDrawer(),
+      drawer: CustomDrawer(context),
     );
   }
 }

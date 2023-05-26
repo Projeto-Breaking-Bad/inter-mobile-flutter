@@ -233,7 +233,7 @@ class UserProfileRegister extends StatelessWidget {
           ],
         ),
       ),
-      drawer: CustomDrawer(),
+      drawer: CustomDrawer(context),
     );
   }
 }

@@ -4,11 +4,26 @@ import 'package:caca_talentos/pages/list/list-company.page.dart';
 import 'package:caca_talentos/pages/list/list-vacancies.page.dart';
 import 'package:caca_talentos/pages/home.page.dart';
 import 'package:flutter/material.dart';
-import 'package:caca_talentos/pages/profile/user-profile.page.dart';
-import 'package:caca_talentos/pages/profile/company-profile.page.dart';
-import 'package:caca_talentos/pages/profile/course-profile.page.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:caca_talentos/pages/login.page.dart';
 
 class CustomDrawer extends StatelessWidget {
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+  final BuildContext context;
+
+  CustomDrawer(this.context);
+
+  Future<void> _signOut() async {
+    await _auth.signOut();
+    // Navegar para a tela de login ou qualquer outra tela inicial do aplicativo
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(
+        builder: (context) => LoginPage(),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Drawer(
@@ -19,9 +34,17 @@ class CustomDrawer extends StatelessWidget {
             decoration: BoxDecoration(
               color: Color(0xFF230B8B),
             ),
-            child: Image.asset(
-              'assets/cacatalentoswhite.png',
-              height: 60,
+            child: Container(
+              height: 80,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Image.asset(
+                    'assets/cacatalentoswhite.png',
+                    height: 80,
+                  ),
+                ],
+              ),
             ),
           ),
           ListTile(
@@ -88,7 +111,7 @@ class CustomDrawer extends StatelessWidget {
             leading: Icon(Icons.exit_to_app),
             title: const Text('Sair'),
             onTap: () {
-              Navigator.pop(context);
+              _signOut();
             },
           ),
         ],

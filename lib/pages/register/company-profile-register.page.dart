@@ -230,7 +230,7 @@ class CompanyProfileRegister extends StatelessWidget {
           ],
         ),
       ),
-      drawer: CustomDrawer(),
+      drawer: CustomDrawer(context),
     );
   }
 }

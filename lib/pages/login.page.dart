@@ -2,8 +2,60 @@ import 'package:caca_talentos/pages/reset-password.page.dart';
 import 'package:caca_talentos/pages/home.page.dart';
 import 'package:caca_talentos/pages/signup.page.dart';
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
-class LoginPage extends StatelessWidget {
+class LoginPage extends StatefulWidget {
+  @override
+  _LoginPageState createState() => _LoginPageState();
+}
+
+class _LoginPageState extends State<LoginPage> {
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+
+  Future<void> _signInWithEmailAndPassword() async {
+    try {
+      final UserCredential userCredential =
+          await _auth.signInWithEmailAndPassword(
+        email: _emailController.text.trim(),
+        password: _passwordController.text.trim(),
+      );
+
+      // Login bem-sucedido, você pode redirecionar o usuário para a próxima página
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => HomePage()),
+      );
+    } catch (e) {
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: const Text('Erro no Login'),
+            content: Text(
+                'Ocorreu um erro durante o login. Verifique suas credenciais e tente novamente.'),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                child: const Text('OK'),
+              ),
+            ],
+          );
+        },
+      );
+    }
+  }
+
+  @override
+  void dispose() {
+    _emailController.dispose();
+    _passwordController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -18,20 +70,19 @@ class LoginPage extends StatelessWidget {
               ),
             ),
             Positioned(
-            top: 0,
-            left: 0,
-            right: 0,
-            child: Center(
-              child: SizedBox(
-                width: 180,
-                height: 180,
-                child: Image.asset("assets/cacatalentoswhite.png"),
+              top: 0,
+              left: 0,
+              right: 0,
+              child: Center(
+                child: SizedBox(
+                  width: 180,
+                  height: 180,
+                  child: Image.asset("assets/cacatalentoswhite.png"),
                 ),
               ),
             ),
             Positioned.fill(
               child: Container(
-                // margin: EdgeInsets.only(top: 170),
                 margin: EdgeInsets.fromLTRB(10, 160, 10, 30),
                 decoration: BoxDecoration(
                   color: Color.fromARGB(255, 255, 255, 255),
@@ -50,8 +101,9 @@ class LoginPage extends StatelessWidget {
                         'Bem vindo!',
                         textAlign: TextAlign.center,
                         overflow: TextOverflow.ellipsis,
-                        style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 28),
-                      ), // adiciona um espaço entre os textos
+                        style: const TextStyle(
+                            fontWeight: FontWeight.bold, fontSize: 28),
+                      ),
                       Text(
                         'Faça o login em sua conta.',
                         textAlign: TextAlign.center,
@@ -66,7 +118,7 @@ class LoginPage extends StatelessWidget {
                         height: 15,
                       ),
                       TextFormField(
-                        // autofocus: true,
+                        controller: _emailController,
                         keyboardType: TextInputType.emailAddress,
                         decoration: InputDecoration(
                           labelText: "E-mail",
@@ -83,7 +135,7 @@ class LoginPage extends StatelessWidget {
                         height: 10,
                       ),
                       TextFormField(
-                        // autofocus: true,
+                        controller: _passwordController,
                         keyboardType: TextInputType.text,
                         obscureText: true,
                         decoration: InputDecoration(
@@ -104,9 +156,6 @@ class LoginPage extends StatelessWidget {
                           child: Text(
                             "Recuperar Senha",
                             textAlign: TextAlign.right,
-                            // style: TextStyle(
-                            //   color: Color.fromARGB(255, 22, 14, 95), // define a cor do texto
-                            // ),
                           ),
                           onPressed: () {
                             Navigator.push(
@@ -150,12 +199,7 @@ class LoginPage extends StatelessWidget {
                               ),
                             ),
                             onPressed: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => HomePage(),
-                                ),
-                              );
+                              _signInWithEmailAndPassword();
                             },
                           ),
                         ),
@@ -191,5 +235,3 @@ class LoginPage extends StatelessWidget {
     );
   }
 }
-
-

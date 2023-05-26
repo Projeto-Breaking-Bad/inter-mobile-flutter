@@ -306,7 +306,7 @@ class VacanciesProfile extends StatelessWidget {
           ],
         ),
       ),
-            drawer: CustomDrawer(),
+            drawer: CustomDrawer(context),
     );
   }
 }

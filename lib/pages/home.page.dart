@@ -11,7 +11,7 @@ class HomePage extends StatelessWidget {
           color: Colors.white,
         ),
       ),
-      drawer: CustomDrawer(), // Adicione o CustomDrawer aqui
+      drawer: CustomDrawer(context), // Adicione o CustomDrawer aqui
       body: const Center(
         child: Text('My Page!'),
       ),

@@ -237,7 +237,7 @@ class CompanyProfile extends StatelessWidget {
           ],
         ),
       ),
-      drawer: CustomDrawer(),
+      drawer: CustomDrawer(context),
     );
   }
 }

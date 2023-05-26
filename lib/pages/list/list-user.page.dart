@@ -238,7 +238,7 @@ class ListUser extends StatelessWidget {
           ],
         ),
       ),
-      drawer: CustomDrawer(),
+      drawer: CustomDrawer(context),
     );
   }
 }

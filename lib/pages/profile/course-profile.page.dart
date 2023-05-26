@@ -283,7 +283,7 @@ class CourseProfile extends StatelessWidget {
           ],
         ),
       ),
-            drawer: CustomDrawer(),
+            drawer: CustomDrawer(context),
     );
   }
 }
