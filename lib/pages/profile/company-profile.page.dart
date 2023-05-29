@@ -3,36 +3,72 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:caca_talentos/pages/components/CustomDrawer.dart';
 import 'package:caca_talentos/pages/home.page.dart';
 
-class CompanyProfile extends StatelessWidget {
-  final String cnpj;
-  String? updatedCnpj;
+class CompanyProfile extends StatefulWidget {
+  final String id;
 
-  CompanyProfile({required this.cnpj});
+  CompanyProfile({required this.id});
 
-  late String nome, email, senha;
+  @override
+  _CompanyProfileState createState() => _CompanyProfileState();
+}
 
-  getNome(String nome) {
-    this.nome = nome;
+class _CompanyProfileState extends State<CompanyProfile> {
+  late String nome, email, senha, cnpj;
+  late TextEditingController nomeController;
+  late TextEditingController emailController;
+  late TextEditingController senhaController;
+  late TextEditingController cnpjController;
+
+  @override
+  void initState() {
+    super.initState();
+    nomeController = TextEditingController();
+    emailController = TextEditingController();
+    senhaController = TextEditingController();
+    cnpjController = TextEditingController();
+    fetchCompany();
   }
 
-  getEmail(String email) {
-    this.email = email;
+  @override
+  void dispose() {
+    nomeController.dispose();
+    emailController.dispose();
+    senhaController.dispose();
+    cnpjController.dispose();
+    super.dispose();
   }
 
-  getSenha(String senha) {
-    this.senha = senha;
+  fetchCompany() async {
+    DocumentSnapshot snapshot = await FirebaseFirestore.instance
+        .collection("empresa")
+        .doc(widget.id)
+        .get();
+
+    if (snapshot.exists) {
+      setState(() {
+        nome = snapshot['nome'];
+        email = snapshot['email'];
+        senha = snapshot['senha'];
+        cnpj = snapshot['cnpj'];
+        nomeController.text = nome;
+        emailController.text = email;
+        senhaController.text = senha;
+        cnpjController.text = cnpj;
+      });
+    }
   }
 
   updateData() {
     DocumentReference documentReference =
-        FirebaseFirestore.instance.collection("empresa").doc(cnpj);
+        FirebaseFirestore.instance.collection("empresa").doc(widget.id);
 
     // create Map
     Map<String, dynamic> empresas = {
       "nome": nome,
+      "cnpj": cnpj,
       "email": email,
       "senha": senha,
-      "cnpj": updatedCnpj ?? cnpj,
+      "id": widget.id,
     };
 
     documentReference.update(empresas).then((_) {
@@ -112,6 +148,7 @@ class CompanyProfile extends StatelessWidget {
                       ),
                       TextFormField(
                         // autofocus: true,
+                        controller: nomeController,
                         keyboardType: TextInputType.emailAddress,
                         decoration: InputDecoration(
                           labelText: "Nome da Empresa",
@@ -123,7 +160,9 @@ class CompanyProfile extends StatelessWidget {
                           ),
                         ),
                         onChanged: (String nome) {
-                          getNome(nome);
+                          setState(() {
+                            this.nome = nome;
+                          });
                         },
                         style: TextStyle(fontSize: 17),
                       ),
@@ -132,6 +171,7 @@ class CompanyProfile extends StatelessWidget {
                       ),
                       TextFormField(
                         // autofocus: true,
+                        controller: cnpjController,
                         keyboardType: TextInputType.number,
                         decoration: InputDecoration(
                           labelText: "CNPJ",
@@ -142,9 +182,10 @@ class CompanyProfile extends StatelessWidget {
                             fontSize: 17,
                           ),
                         ),
-                        initialValue: cnpj,
                         onChanged: (String cnpj) {
-                          updatedCnpj = cnpj;
+                          setState(() {
+                            this.cnpj = cnpj;
+                          });
                         },
                         style: TextStyle(fontSize: 17),
                       ),
@@ -153,6 +194,7 @@ class CompanyProfile extends StatelessWidget {
                       ),
                       TextFormField(
                         // autofocus: true,
+                        controller: emailController,
                         keyboardType: TextInputType.emailAddress,
                         decoration: InputDecoration(
                           labelText: "E-mail",
@@ -164,7 +206,9 @@ class CompanyProfile extends StatelessWidget {
                           ),
                         ),
                         onChanged: (String email) {
-                          getEmail(email);
+                          setState(() {
+                            this.email = email;
+                          });
                         },
                         style: TextStyle(fontSize: 17),
                       ),
@@ -173,6 +217,7 @@ class CompanyProfile extends StatelessWidget {
                       ),
                       TextFormField(
                         // autofocus: true,
+                        controller: senhaController,
                         keyboardType: TextInputType.text,
                         obscureText: true,
                         decoration: InputDecoration(
@@ -185,7 +230,9 @@ class CompanyProfile extends StatelessWidget {
                           ),
                         ),
                         onChanged: (String senha) {
-                          getSenha(senha);
+                          setState(() {
+                            this.senha = senha;
+                          });
                         },
                         style: TextStyle(fontSize: 17),
                       ),

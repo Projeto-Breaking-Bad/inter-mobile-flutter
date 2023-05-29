@@ -6,25 +6,25 @@ import 'package:caca_talentos/pages/signup.page.dart';
 class CompanyProfileRegister extends StatelessWidget {
   late String nome, cnpj, email, senha;
 
-  getNome(nome) {
+  getNome(String nome) {
     this.nome = nome;
   }
 
-  getCnpj(cnpj) {
+  getCnpj(String cnpj) {
     this.cnpj = cnpj;
   }
 
-  getEmail(email) {
+  getEmail(String email) {
     this.email = email;
   }
 
-  getSenha(senha) {
+  getSenha(String senha) {
     this.senha = senha;
   }
 
   createData() {
-    DocumentReference documentReference =
-        FirebaseFirestore.instance.collection("empresa").doc(cnpj);
+    CollectionReference collectionReference =
+        FirebaseFirestore.instance.collection("empresa");
 
     // create Map
     Map<String, dynamic> empresas = {
@@ -34,8 +34,10 @@ class CompanyProfileRegister extends StatelessWidget {
       "senha": senha,
     };
 
-    documentReference.set(empresas).whenComplete(() {
-      print("$cnpj cadastrado com sucesso.");
+    collectionReference.add(empresas).then((DocumentReference document) {
+      print("Empresa cadastrada com ID: ${document.id}");
+    }).catchError((error) {
+      print("Erro ao cadastrar empresa: $error");
     });
   }
 

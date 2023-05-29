@@ -3,62 +3,80 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:caca_talentos/pages/home.page.dart';
 
-class UserProfile extends StatelessWidget {
-  final String cpf;
-  String? updatedCpf;
+class UserProfile extends StatefulWidget {
+  final String id;
 
-  UserProfile({required this.cpf});
+  UserProfile({required this.id});
 
-  late String nome, email, senha;
-
-  getNome(String nome) {
-    this.nome = nome;
-  }
-
-  getEmail(String email) {
-    this.email = email;
-  }
-
-  getSenha(String senha) {
-    this.senha = senha;
-  }
-
-  // updateData() {
-  //   DocumentReference documentReference =
-  //       FirebaseFirestore.instance.collection("aluno").doc(cpf);
-
-  //   // create Map
-  //   Map<String, dynamic> alunos = {
-  //     "nome": nome,
-  //     "email": email,
-  //     "senha": senha,
-  //     "cpf": updatedCpf ?? cpf,
-  //   };
-
-  //   documentReference.set(alunos).whenComplete(() {
-  //     print("$nome Atualizado com sucesso.");
-  //   });
-  // }
-
-  updateData() {
-  DocumentReference documentReference =
-      FirebaseFirestore.instance.collection("aluno").doc(cpf);
-
-  // create Map
-  Map<String, dynamic> alunos = {
-    "nome": nome,
-    "email": email,
-    "senha": senha,
-    "cpf": updatedCpf ?? cpf,
-  };
-
-  documentReference.update(alunos).then((_) {
-    print("$nome atualizado com sucesso.");
-  }).catchError((error) {
-    print("Erro ao atualizar $nome: $error");
-  });
+  @override
+  _UserProfileState createState() => _UserProfileState();
 }
 
+class _UserProfileState extends State<UserProfile> {
+  late String nome, cpf, email, senha;
+  late TextEditingController nomeController;
+  late TextEditingController cpfController;
+  late TextEditingController emailController;
+  late TextEditingController senhaController;
+
+  @override
+  void initState() {
+    super.initState();
+    nomeController = TextEditingController();
+    cpfController = TextEditingController();
+    emailController = TextEditingController();
+    senhaController = TextEditingController();
+    fetchUserData();
+  }
+
+  @override
+  void dispose() {
+    nomeController.dispose();
+    cpfController.dispose();
+    emailController.dispose();
+    senhaController.dispose();
+    super.dispose();
+  }
+
+  fetchUserData() async {
+    DocumentSnapshot snapshot = await FirebaseFirestore.instance
+        .collection("aluno")
+        .doc(widget.id)
+        .get();
+
+    if (snapshot.exists) {
+      setState(() {
+        nome = snapshot['nome'];
+        cpf = snapshot['cpf'];
+        email = snapshot['email'];
+        senha = snapshot['senha'];
+        nomeController.text = nome;
+        cpfController.text = cpf;
+        emailController.text = email;
+        senhaController.text = senha;
+      });
+    }
+  }
+
+  updateData() {
+    DocumentReference documentReference =
+        FirebaseFirestore.instance.collection("aluno").doc(widget.id);
+
+    // create Map
+    Map<String, dynamic> alunos = {
+      "nome": nome,
+      "cpf": cpf,
+      "email": email,
+      "senha": senha,
+      "id": widget.id,
+    };
+
+    documentReference.update(alunos).then((_) {
+      print("$nome atualizado com sucesso.");
+    }).catchError((error) {
+      print("Erro ao atualizar $nome: $error");
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -125,11 +143,8 @@ class UserProfile extends StatelessWidget {
                           color: Colors.grey[400],
                         ),
                       ),
-                      SizedBox(
-                        height: 15,
-                      ),
                       TextFormField(
-                        // autofocus: true,
+                        controller: nomeController,
                         keyboardType: TextInputType.emailAddress,
                         decoration: InputDecoration(
                           labelText: "Nome",
@@ -141,7 +156,9 @@ class UserProfile extends StatelessWidget {
                           ),
                         ),
                         onChanged: (String nome) {
-                          getNome(nome);
+                          setState(() {
+                            this.nome = nome;
+                          });
                         },
                         style: TextStyle(fontSize: 17),
                       ),
@@ -149,25 +166,26 @@ class UserProfile extends StatelessWidget {
                         height: 10,
                       ),
                       TextFormField(
-                        // autofocus: true,
+                        controller: cpfController,
                         keyboardType: TextInputType.number,
                         decoration: InputDecoration(
                           labelText: "CPF",
-                          prefixIcon: Icon(Icons.card_membership),
+                          prefixIcon: Icon(Icons.people),
                           labelStyle: TextStyle(
                             color: Colors.black38,
                             fontWeight: FontWeight.w400,
                             fontSize: 17,
                           ),
                         ),
-                        initialValue: cpf,
-                        onChanged: (String updatedCpf) {
-                          this.updatedCpf = updatedCpf;
+                        onChanged: (String cpf) {
+                          setState(() {
+                            this.cpf = cpf;
+                          });
                         },
                         style: TextStyle(fontSize: 17),
                       ),
                       TextFormField(
-                        // autofocus: true,
+                        controller: emailController,
                         keyboardType: TextInputType.emailAddress,
                         decoration: InputDecoration(
                           labelText: "E-mail",
@@ -179,7 +197,9 @@ class UserProfile extends StatelessWidget {
                           ),
                         ),
                         onChanged: (String email) {
-                          getEmail(email);
+                          setState(() {
+                            this.email = email;
+                          });
                         },
                         style: TextStyle(fontSize: 17),
                       ),
@@ -187,7 +207,7 @@ class UserProfile extends StatelessWidget {
                         height: 10,
                       ),
                       TextFormField(
-                        // autofocus: true,
+                        controller: senhaController,
                         keyboardType: TextInputType.text,
                         obscureText: true,
                         decoration: InputDecoration(
@@ -200,7 +220,9 @@ class UserProfile extends StatelessWidget {
                           ),
                         ),
                         onChanged: (String senha) {
-                          getSenha(senha);
+                          setState(() {
+                            this.senha = senha;
+                          });
                         },
                         style: TextStyle(fontSize: 17),
                       ),

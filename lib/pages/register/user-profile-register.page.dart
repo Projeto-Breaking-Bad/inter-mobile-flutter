@@ -23,19 +23,21 @@ class UserProfileRegister extends StatelessWidget {
   }
 
   createData() {
-    DocumentReference documentReference =
-        FirebaseFirestore.instance.collection("aluno").doc(cpf);
+    CollectionReference collectionReference =
+        FirebaseFirestore.instance.collection("aluno");
 
     // create Map
-    Map<String, dynamic> alunos = {
+    Map<String, dynamic> aluno = {
       "nome": nome,
       "cpf": cpf,
       "email": email,
       "senha": senha,
     };
 
-    documentReference.set(alunos).whenComplete(() {
-      print("$nome cadastrado com sucesso.");
+    collectionReference.add(aluno).then((value) {
+      print("$nome cadastrado com sucesso. ID: ${value.id}");
+    }).catchError((error) {
+      print("Falha ao cadastrar o usuário: $error");
     });
   }
 

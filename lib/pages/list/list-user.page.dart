@@ -7,12 +7,12 @@ import 'package:caca_talentos/pages/profile/user-profile.page.dart';
 class ListUser extends StatelessWidget {
   late String nome, cpf, email, senha;
 
-  deleteData(BuildContext context, String documentId, String cpf) {
+  deleteData(BuildContext context, String documentId) {
     DocumentReference documentReference =
         FirebaseFirestore.instance.collection("aluno").doc(documentId);
 
     documentReference.delete().whenComplete(() {
-      print("$cpf deletado");
+      print("$documentId deletado");
       // Adicione aqui qualquer código adicional que você queira executar após a exclusão
     });
   }
@@ -92,9 +92,6 @@ class ListUser extends StatelessWidget {
                           child: Text(
                             "Cadastre um novo usuário",
                             textAlign: TextAlign.right,
-                            // style: TextStyle(
-                            //   color: Color.fromARGB(255, 22, 14, 95), // define a cor do texto
-                            // ),
                           ),
                           onPressed: () {
                             Navigator.push(
@@ -193,10 +190,9 @@ class ListUser extends StatelessWidget {
                                               icon: Icon(Icons.delete),
                                               onPressed: () {
                                                 deleteData(
-                                                    context,
-                                                    docSnapshot.id.toString(),
-                                                    docSnapshot['cpf']
-                                                        .toString());
+                                                  context,
+                                                  docSnapshot.id.toString(),
+                                                );
                                               },
                                             ),
                                             IconButton(
@@ -207,9 +203,9 @@ class ListUser extends StatelessWidget {
                                                   MaterialPageRoute(
                                                     builder: (context) =>
                                                         UserProfile(
-                                                            cpf: docSnapshot[
-                                                                    'cpf']
-                                                                .toString()),
+                                                      id: docSnapshot.id
+                                                          .toString(),
+                                                    ),
                                                   ),
                                                 );
                                               },

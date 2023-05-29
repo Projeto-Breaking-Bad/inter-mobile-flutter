@@ -6,15 +6,15 @@ import 'package:caca_talentos/pages/register/user-profile-register.page.dart';
 import 'package:caca_talentos/pages/profile/company-profile.page.dart';
 
 class ListCompany extends StatelessWidget {
-  late String nome, cnpj, email, senha;
+  late String nome, email, senha;
 
-  deleteData(BuildContext context, String documentId, String cnpj) {
+  deleteData(BuildContext context, String documentId, String id) {
     DocumentReference documentReference =
         FirebaseFirestore.instance.collection("empresa").doc(documentId);
 
     documentReference.delete().whenComplete(() {
-      print("$cnpj deletado");
-      // Adicione aqui qualquer código adicional que você queira executar após a exclusão
+      print("$id deleted");
+      // Add any additional code you want to execute after deletion here
     });
   }
 
@@ -74,7 +74,7 @@ class ListCompany extends StatelessWidget {
                             fontWeight: FontWeight.bold, fontSize: 25),
                       ),
                       Text(
-                        'Lista de Empresas cadastrados no sistema',
+                        'Lista de Empresas cadastradas no sistema',
                         textAlign: TextAlign.center,
                         overflow: TextOverflow.ellipsis,
                         style: TextStyle(
@@ -196,8 +196,7 @@ class ListCompany extends StatelessWidget {
                                                 deleteData(
                                                     context,
                                                     docSnapshot.id.toString(),
-                                                    docSnapshot['cnpj']
-                                                        .toString());
+                                                    docSnapshot.id.toString());
                                               },
                                             ),
                                             IconButton(
@@ -208,9 +207,8 @@ class ListCompany extends StatelessWidget {
                                                   MaterialPageRoute(
                                                     builder: (context) =>
                                                         CompanyProfile(
-                                                            cnpj: docSnapshot[
-                                                                    'cnpj']
-                                                                .toString()),
+                                                          id: docSnapshot.id.toString(),
+                                                        ),
                                                   ),
                                                 );
                                               },
