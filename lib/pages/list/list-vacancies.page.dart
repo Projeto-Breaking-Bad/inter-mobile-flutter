@@ -15,12 +15,12 @@ class ListVacancies extends StatelessWidget {
       requisitos,
       quantVagas;
 
-  deleteData(BuildContext context, String documentId, String cnpj) {
+  deleteData(BuildContext context, String documentId) {
     DocumentReference documentReference =
         FirebaseFirestore.instance.collection("vaga").doc(documentId);
 
     documentReference.delete().whenComplete(() {
-      print("$cnpj deletado");
+      print("$documentId deletado");
       // Adicione aqui qualquer código adicional que você queira executar após a exclusão
     });
   }
@@ -108,7 +108,8 @@ class ListVacancies extends StatelessWidget {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => VacanciesProfileRegister(),
+                                builder: (context) =>
+                                    VacanciesProfileRegister(),
                               ),
                             );
                           },
@@ -201,10 +202,9 @@ class ListVacancies extends StatelessWidget {
                                               icon: Icon(Icons.delete),
                                               onPressed: () {
                                                 deleteData(
-                                                    context,
-                                                    docSnapshot.id.toString(),
-                                                    docSnapshot['cnpj']
-                                                        .toString());
+                                                  context,
+                                                  docSnapshot.id.toString(),
+                                                );
                                               },
                                             ),
                                             IconButton(
@@ -215,9 +215,9 @@ class ListVacancies extends StatelessWidget {
                                                   MaterialPageRoute(
                                                     builder: (context) =>
                                                         VacanciesProfile(
-                                                            cnpj: docSnapshot[
-                                                                    'cnpj']
-                                                                .toString()),
+                                                      id: docSnapshot.id
+                                                          .toString(),
+                                                    ),
                                                   ),
                                                 );
                                               },

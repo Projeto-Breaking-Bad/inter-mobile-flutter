@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:caca_talentos/pages/components/CustomDrawer.dart';
+
 class VacanciesProfileRegister extends StatelessWidget {
   late String cnpj,
       areaAtuacao,
@@ -39,8 +40,8 @@ class VacanciesProfileRegister extends StatelessWidget {
   }
 
   createData() {
-    DocumentReference documentReference =
-        FirebaseFirestore.instance.collection("vaga").doc(cnpj);
+    CollectionReference collectionReference =
+        FirebaseFirestore.instance.collection("vaga");
 
     // create Map
     Map<String, dynamic> vagas = {
@@ -53,8 +54,10 @@ class VacanciesProfileRegister extends StatelessWidget {
       "quantVagas": quantVagas,
     };
 
-    documentReference.set(vagas).whenComplete(() {
-      print("$cnpj Cadastrado com sucesso.");
+    collectionReference.add(vagas).then((value) {
+      print("$cnpj cadastrado com sucesso. ID: ${value.id}");
+    }).catchError((error) {
+      print("Falha ao cadastrar o usuário: $error");
     });
   }
 
@@ -303,7 +306,7 @@ class VacanciesProfileRegister extends StatelessWidget {
           ],
         ),
       ),
-            drawer: CustomDrawer(context),
+      drawer: CustomDrawer(context),
     );
   }
 }

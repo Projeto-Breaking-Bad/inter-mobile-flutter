@@ -1,57 +1,98 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:caca_talentos/pages/components/CustomDrawer.dart';
-class VacanciesProfile extends StatelessWidget {
-  final String cnpj;
-  String? updatedCnpj;
 
-  VacanciesProfile({required this.cnpj});
+class VacanciesProfile extends StatefulWidget {
+  final String id;
 
-  late String
-      areaAtuacao,
+  VacanciesProfile({required this.id});
+
+  @override
+  _VacanciesProfileState createState() => _VacanciesProfileState();
+}
+
+class _VacanciesProfileState extends State<VacanciesProfile> {
+  late String areaAtuacao,
       horas,
       salario,
       descricao,
       requisitos,
+      cnpj,
       quantVagas;
+  late TextEditingController areaAtuacaoController;
+  late TextEditingController horasController;
+  late TextEditingController salarioController;
+  late TextEditingController descricaoController;
+  late TextEditingController requisitosController;
+  late TextEditingController cnpjController;
+  late TextEditingController quantVagasController;
 
-  getAreaAtuacao(String areaAtuacao) {
-    this.areaAtuacao = areaAtuacao;
+  @override
+  void initState() {
+    super.initState();
+    areaAtuacaoController = TextEditingController();
+    horasController = TextEditingController();
+    salarioController = TextEditingController();
+    descricaoController = TextEditingController();
+    requisitosController = TextEditingController();
+    cnpjController = TextEditingController();
+    quantVagasController = TextEditingController();
+    fetchVacancies();
   }
 
-  getHoras(String horas) {
-    this.horas = horas;
+  @override
+  void dispose() {
+    super.dispose();
+    areaAtuacaoController.dispose();
+    horasController.dispose();
+    salarioController.dispose();
+    descricaoController.dispose();
+    requisitosController.dispose();
+    cnpjController.dispose();
+    quantVagasController.dispose();
+    super.dispose();
   }
 
-  getSalario(String salario) {
-    this.salario = salario;
-  }
+  fetchVacancies() async {
+    DocumentSnapshot snapshot = await FirebaseFirestore.instance
+        .collection("vaga")
+        .doc(widget.id)
+        .get();
 
-  getDescricao(String descricao) {
-    this.descricao = descricao;
-  }
-
-  getRequisitos(String requisitos) {
-    this.requisitos = requisitos;
-  }
-
-  getQuantVagas(String quantVagas) {
-    this.quantVagas = quantVagas;
+    if (snapshot.exists) {
+      setState(() {
+        areaAtuacao = snapshot['areaAtuacao'];
+        horas = snapshot['horas'];
+        salario = snapshot['salario'];
+        descricao = snapshot['descricao'];
+        requisitos = snapshot['requisitos'];
+        cnpj = snapshot['cnpj'];
+        quantVagas = snapshot['quantVagas'];
+        areaAtuacaoController.text = areaAtuacao;
+        horasController.text = horas;
+        salarioController.text = salario;
+        descricaoController.text = descricao;
+        requisitosController.text = requisitos;
+        cnpjController.text = cnpj;
+        quantVagasController.text = quantVagas;
+      });
+    }
   }
 
   updateData() {
     DocumentReference documentReference =
-        FirebaseFirestore.instance.collection("vaga").doc(cnpj);
+        FirebaseFirestore.instance.collection("vaga").doc(widget.id);
 
     // create Map
     Map<String, dynamic> vagas = {
-      "cnpj": updatedCnpj ?? cnpj,
       "areaAtuacao": areaAtuacao,
+      "cnpj": cnpj,
       "horas": horas,
       "salario": salario,
       "descricao": descricao,
       "requisitos": requisitos,
       "quantVagas": quantVagas,
+      "id": widget.id,
     };
 
     documentReference.update(vagas).then((_) {
@@ -131,6 +172,7 @@ class VacanciesProfile extends StatelessWidget {
                       ),
                       TextFormField(
                         // autofocus: true,
+                        controller: cnpjController,
                         keyboardType: TextInputType.emailAddress,
                         decoration: InputDecoration(
                           labelText: "CNPJ",
@@ -141,9 +183,10 @@ class VacanciesProfile extends StatelessWidget {
                             fontSize: 17,
                           ),
                         ),
-                        initialValue: cnpj,
                         onChanged: (String cnpj) {
-                          updatedCnpj = cnpj;
+                          setState(() {
+                            this.cnpj = cnpj;
+                          });
                         },
                         style: TextStyle(fontSize: 17),
                       ),
@@ -152,6 +195,7 @@ class VacanciesProfile extends StatelessWidget {
                       ),
                       TextFormField(
                         // autofocus: true,
+                        controller: areaAtuacaoController,
                         keyboardType: TextInputType.text,
                         decoration: InputDecoration(
                           labelText: "Área de Atuação",
@@ -163,7 +207,9 @@ class VacanciesProfile extends StatelessWidget {
                           ),
                         ),
                         onChanged: (String areaAtuacao) {
-                          getAreaAtuacao(areaAtuacao);
+                          setState(() {
+                            this.areaAtuacao = areaAtuacao;
+                          });
                         },
                         style: TextStyle(fontSize: 17),
                       ),
@@ -172,6 +218,7 @@ class VacanciesProfile extends StatelessWidget {
                       ),
                       TextFormField(
                         // autofocus: true,
+                        controller: horasController,
                         keyboardType: TextInputType.text,
                         decoration: InputDecoration(
                           prefixIcon: Icon(Icons.timer),
@@ -183,12 +230,15 @@ class VacanciesProfile extends StatelessWidget {
                           ),
                         ),
                         onChanged: (String horas) {
-                          getHoras(horas);
+                          setState(() {
+                            this.horas = horas;
+                          });
                         },
                         style: TextStyle(fontSize: 17),
                       ),
                       TextFormField(
                         // autofocus: true,
+                        controller: salarioController,
                         keyboardType: TextInputType.text,
                         decoration: InputDecoration(
                           prefixIcon: Icon(Icons.money),
@@ -200,7 +250,9 @@ class VacanciesProfile extends StatelessWidget {
                           ),
                         ),
                         onChanged: (String salario) {
-                          getSalario(salario);
+                          setState(() {
+                            this.salario = salario;
+                          });
                         },
                         style: TextStyle(fontSize: 17),
                       ),
@@ -209,6 +261,7 @@ class VacanciesProfile extends StatelessWidget {
                       ),
                       TextFormField(
                         // autofocus: true,
+                        controller: requisitosController,
                         keyboardType: TextInputType.text,
                         decoration: InputDecoration(
                           prefixIcon: Icon(Icons.list_alt),
@@ -220,12 +273,15 @@ class VacanciesProfile extends StatelessWidget {
                           ),
                         ),
                         onChanged: (String requisitos) {
-                          getRequisitos(requisitos);
+                          setState(() {
+                            this.requisitos = requisitos;
+                          });
                         },
                         style: TextStyle(fontSize: 17),
                       ),
                       TextFormField(
                         // autofocus: true,
+                        controller: quantVagasController,
                         keyboardType: TextInputType.text,
                         decoration: InputDecoration(
                           prefixIcon: Icon(Icons.add_chart),
@@ -237,12 +293,15 @@ class VacanciesProfile extends StatelessWidget {
                           ),
                         ),
                         onChanged: (String quantVagas) {
-                          getQuantVagas(quantVagas);
+                          setState(() {
+                            this.quantVagas = quantVagas;
+                          });
                         },
                         style: TextStyle(fontSize: 17),
                       ),
                       TextFormField(
                         // autofocus: true,
+                        controller: descricaoController,
                         keyboardType: TextInputType.text,
                         decoration: InputDecoration(
                           prefixIcon: Icon(Icons.description),
@@ -254,7 +313,9 @@ class VacanciesProfile extends StatelessWidget {
                           ),
                         ),
                         onChanged: (String descricao) {
-                          getDescricao(descricao);
+                          setState(() {
+                            this.descricao = descricao;
+                          });
                         },
                         style: TextStyle(fontSize: 17),
                       ),
@@ -306,7 +367,7 @@ class VacanciesProfile extends StatelessWidget {
           ],
         ),
       ),
-            drawer: CustomDrawer(context),
+      drawer: CustomDrawer(context),
     );
   }
 }
