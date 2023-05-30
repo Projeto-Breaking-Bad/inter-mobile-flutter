@@ -2,50 +2,90 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:caca_talentos/pages/components/CustomDrawer.dart';
 
-class CourseProfile extends StatelessWidget {
-  final String nomeCurso;
-  String? updatedNomeCurso;
+class CourseProfile extends StatefulWidget {
+  final String id;
 
-  CourseProfile({required this.nomeCurso});
+  CourseProfile({required this.id});
 
-  late String horaCurso,
+  @override
+  _CourseProfileState createState() => _CourseProfileState();
+}
+
+class _CourseProfileState extends State<CourseProfile> {
+  late String nomeCurso,
+      horaCurso,
       compCurriculares,
       periodoCurso,
       descricaoCurso,
       quantVagas;
 
-  getHoraCurso(String horaCurso) {
-    this.horaCurso = horaCurso;
+  late TextEditingController nomeCursoController;
+  late TextEditingController horaCursoController;
+  late TextEditingController compCurricularesController;
+  late TextEditingController periodoCursoController;
+  late TextEditingController descricaoCursoController;
+  late TextEditingController quantVagasController;
+
+  @override
+  void initState() {
+    super.initState();
+    nomeCursoController = TextEditingController();
+    horaCursoController = TextEditingController();
+    compCurricularesController = TextEditingController();
+    periodoCursoController = TextEditingController();
+    descricaoCursoController = TextEditingController();
+    quantVagasController = TextEditingController();
+    fetchCourseData();
   }
 
-  getCompCurriculares(String compCurriculares) {
-    this.compCurriculares = compCurriculares;
+  @override
+  void dispose() {
+    nomeCursoController.dispose();
+    horaCursoController.dispose();
+    compCurricularesController.dispose();
+    periodoCursoController.dispose();
+    descricaoCursoController.dispose();
+    quantVagasController.dispose();
+    super.dispose();
   }
 
-  getPeriodoCurso(String periodoCurso) {
-    this.periodoCurso = periodoCurso;
-  }
+  fetchCourseData() async {
+    DocumentSnapshot snapshot = await FirebaseFirestore.instance
+        .collection("curso")
+        .doc(widget.id)
+        .get();
 
-  getDescricaoCurso(String descricaoCurso) {
-    this.descricaoCurso = descricaoCurso;
-  }
-
-  getQuantVagas(String quantVagas) {
-    this.quantVagas = quantVagas;
+    if (snapshot.exists) {
+      setState(() {
+        nomeCurso = snapshot['nomeCurso'];
+        horaCurso = snapshot['horaCurso'];
+        compCurriculares = snapshot['compCurriculares'];
+        periodoCurso = snapshot['periodoCurso'];
+        descricaoCurso = snapshot['descricaoCurso'];
+        quantVagas = snapshot['quantVagas'];
+        nomeCursoController.text = nomeCurso;
+        horaCursoController.text = horaCurso;
+        compCurricularesController.text = compCurriculares;
+        periodoCursoController.text = periodoCurso;
+        descricaoCursoController.text = descricaoCurso;
+        quantVagasController.text = quantVagas;
+      });
+    }
   }
 
   updateData() {
     DocumentReference documentReference =
-        FirebaseFirestore.instance.collection("curso").doc(nomeCurso);
+        FirebaseFirestore.instance.collection("curso").doc(widget.id);
 
     // create Map
     Map<String, dynamic> vagas = {
-      "nomeCurso": updatedNomeCurso ?? nomeCurso,
+      "nomeCurso": nomeCurso,
       "horaCurso": horaCurso,
       "compCurriculares": compCurriculares,
       "periodoCurso": periodoCurso,
       "descricaoCurso": descricaoCurso,
       "quantVagas": quantVagas,
+      "id": widget.id,
     };
 
     documentReference.set(vagas).then((_) {
@@ -125,6 +165,7 @@ class CourseProfile extends StatelessWidget {
                       ),
                       TextFormField(
                         // autofocus: true,
+                        controller: nomeCursoController,
                         keyboardType: TextInputType.text,
                         decoration: InputDecoration(
                           labelText: "Nome do Curso",
@@ -135,9 +176,10 @@ class CourseProfile extends StatelessWidget {
                             fontSize: 17,
                           ),
                         ),
-                        initialValue: nomeCurso,
-                        onChanged: (String updatedNomeCurso) {
-                          this.updatedNomeCurso = updatedNomeCurso;
+                        onChanged: (String nomeCurso) {
+                          setState(() {
+                            this.nomeCurso = nomeCurso;
+                          });
                         },
                         style: TextStyle(fontSize: 17),
                       ),
@@ -146,6 +188,7 @@ class CourseProfile extends StatelessWidget {
                       ),
                       TextFormField(
                         // autofocus: true,
+                        controller: horaCursoController,
                         keyboardType: TextInputType.text,
                         decoration: InputDecoration(
                           labelText: "Horário do Curso",
@@ -157,7 +200,9 @@ class CourseProfile extends StatelessWidget {
                           ),
                         ),
                         onChanged: (String horaCurso) {
-                          getHoraCurso(horaCurso);
+                          setState(() {
+                            this.horaCurso = horaCurso;
+                          });
                         },
                         style: TextStyle(fontSize: 17),
                       ),
@@ -166,6 +211,7 @@ class CourseProfile extends StatelessWidget {
                       ),
                       TextFormField(
                         // autofocus: true,
+                        controller: compCurricularesController,
                         keyboardType: TextInputType.text,
                         decoration: InputDecoration(
                           prefixIcon: Icon(Icons.book),
@@ -177,12 +223,15 @@ class CourseProfile extends StatelessWidget {
                           ),
                         ),
                         onChanged: (String compCurriculares) {
-                          getCompCurriculares(compCurriculares);
+                          setState(() {
+                            this.compCurriculares = compCurriculares;
+                          });
                         },
                         style: TextStyle(fontSize: 17),
                       ),
                       TextFormField(
                         // autofocus: true,
+                        controller: periodoCursoController,
                         keyboardType: TextInputType.text,
                         decoration: InputDecoration(
                           prefixIcon: Icon(Icons.date_range),
@@ -194,7 +243,9 @@ class CourseProfile extends StatelessWidget {
                           ),
                         ),
                         onChanged: (String periodoCurso) {
-                          getPeriodoCurso(periodoCurso);
+                          setState(() {
+                            this.periodoCurso = periodoCurso;
+                          });
                         },
                         style: TextStyle(fontSize: 17),
                       ),
@@ -203,6 +254,7 @@ class CourseProfile extends StatelessWidget {
                       ),
                       TextFormField(
                         // autofocus: true,
+                        controller: descricaoCursoController,
                         keyboardType: TextInputType.text,
                         decoration: InputDecoration(
                           prefixIcon: Icon(Icons.bookmark_add),
@@ -214,15 +266,21 @@ class CourseProfile extends StatelessWidget {
                           ),
                         ),
                         onChanged: (String descricaoCurso) {
-                          getDescricaoCurso(descricaoCurso);
+                          setState(() {
+                            this.descricaoCurso = descricaoCurso;
+                          });
                         },
                         style: TextStyle(fontSize: 17),
                       ),
+                      SizedBox(
+                        height: 10,
+                      ),
                       TextFormField(
                         // autofocus: true,
-                        keyboardType: TextInputType.text,
+                        controller: quantVagasController,
+                        keyboardType: TextInputType.number,
                         decoration: InputDecoration(
-                          prefixIcon: Icon(Icons.format_list_numbered_rounded),
+                          prefixIcon: Icon(Icons.person),
                           labelText: "Quantidade de Vagas",
                           labelStyle: TextStyle(
                             color: Colors.black38,
@@ -231,12 +289,14 @@ class CourseProfile extends StatelessWidget {
                           ),
                         ),
                         onChanged: (String quantVagas) {
-                          getQuantVagas(quantVagas);
+                          setState(() {
+                            this.quantVagas = quantVagas;
+                          });
                         },
                         style: TextStyle(fontSize: 17),
                       ),
                       SizedBox(
-                        height: 40,
+                        height: 20,
                       ),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -283,7 +343,7 @@ class CourseProfile extends StatelessWidget {
           ],
         ),
       ),
-            drawer: CustomDrawer(context),
+      drawer: CustomDrawer(context),
     );
   }
 }

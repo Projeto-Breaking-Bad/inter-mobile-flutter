@@ -35,8 +35,8 @@ class CourseProfileRegister extends StatelessWidget {
   }
 
   createData() {
-    DocumentReference documentReference =
-        FirebaseFirestore.instance.collection("curso").doc(nomeCurso);
+    CollectionReference collectionReference =
+        FirebaseFirestore.instance.collection("curso");
 
     // create Map
     Map<String, dynamic> cursos = {
@@ -48,10 +48,10 @@ class CourseProfileRegister extends StatelessWidget {
       "quantVagas": quantVagas,
     };
 
-    documentReference.set(cursos).then((_) {
-      print("$nomeCurso cadastrar com sucesso.");
+    collectionReference.add(cursos).then((value) {
+      print("$nomeCurso cadastrar com sucesso. ID: ${value.id}");
     }).catchError((error) {
-      print("Erro ao cadastrar $nomeCurso: $error");
+      print("Erro ao cadastrar o curso $error");
     });
   }
 

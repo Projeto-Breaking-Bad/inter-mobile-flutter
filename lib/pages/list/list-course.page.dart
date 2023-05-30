@@ -15,12 +15,12 @@ class ListCourse extends StatelessWidget {
       descricaoCurso,
       quantVagas;
 
-  deleteData(BuildContext context, String documentId, String nomeCurso) {
+  deleteData(BuildContext context, String documentId) {
     DocumentReference documentReference =
         FirebaseFirestore.instance.collection("curso").doc(documentId);
 
     documentReference.delete().whenComplete(() {
-      print("$nomeCurso deletado");
+      print("$documentId deletado");
       // Adicione aqui qualquer código adicional que você queira executar após a exclusão
     });
   }
@@ -235,9 +235,6 @@ class ListCourse extends StatelessWidget {
                                                 deleteData(
                                                   context,
                                                   docSnapshot.id.toString(),
-                                                  nomeCurso != null
-                                                      ? nomeCurso.toString()
-                                                      : '',
                                                 );
                                               },
                                             ),
@@ -249,10 +246,8 @@ class ListCourse extends StatelessWidget {
                                                   MaterialPageRoute(
                                                     builder: (context) =>
                                                         CourseProfile(
-                                                      nomeCurso: nomeCurso !=
-                                                              null
-                                                          ? nomeCurso.toString()
-                                                          : '',
+                                                      id: docSnapshot.id
+                                                          .toString(),
                                                     ),
                                                   ),
                                                 );
