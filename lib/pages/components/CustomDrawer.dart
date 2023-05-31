@@ -1,3 +1,4 @@
+import 'package:caca_talentos/pages/list/list-admin.page.dart';
 import 'package:caca_talentos/pages/list/list-course.page.dart';
 import 'package:caca_talentos/pages/list/list-user.page.dart';
 import 'package:caca_talentos/pages/list/list-company.page.dart';
@@ -55,6 +56,18 @@ class CustomDrawer extends StatelessWidget {
                 context,
                 MaterialPageRoute(
                   builder: (context) => HomePage(),
+                ),
+              );
+            },
+          ),
+          ListTile(
+            leading: Icon(Icons.show_chart),
+            title: const Text('Administrador'),
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => ListAdmin(),
                 ),
               );
             },
