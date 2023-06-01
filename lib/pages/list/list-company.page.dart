@@ -8,12 +8,12 @@ import 'package:caca_talentos/pages/profile/company-profile.page.dart';
 class ListCompany extends StatelessWidget {
   late String nome, email, senha;
 
-  deleteData(BuildContext context, String documentId, String id) {
+  deleteData(BuildContext context, String documentId) {
     DocumentReference documentReference =
         FirebaseFirestore.instance.collection("empresa").doc(documentId);
 
     documentReference.delete().whenComplete(() {
-      print("$id deleted");
+      print("$documentId deleted");
       // Add any additional code you want to execute after deletion here
     });
   }
@@ -190,13 +190,41 @@ class ListCompany extends StatelessWidget {
                                       DataCell(
                                         Row(
                                           children: [
-                                            IconButton(
-                                              icon: Icon(Icons.delete),
+                                            TextButton(
+                                              child: Icon(Icons.delete),
                                               onPressed: () {
-                                                deleteData(
-                                                    context,
-                                                    docSnapshot.id.toString(),
-                                                    docSnapshot.id.toString());
+                                                showDialog(
+                                                  context: context,
+                                                  builder: (context) =>
+                                                      AlertDialog(
+                                                    title:
+                                                        Text('Excluir Empresa'),
+                                                    content: Text(
+                                                      'Tem certeza de que deseja excluir este Empresa?',
+                                                    ),
+                                                    actions: [
+                                                      TextButton(
+                                                        child: Text('Cancelar'),
+                                                        onPressed: () {
+                                                          Navigator.pop(
+                                                              context);
+                                                        },
+                                                      ),
+                                                      TextButton(
+                                                        child: Text('Excluir'),
+                                                        onPressed: () {
+                                                          deleteData(
+                                                            context,
+                                                            docSnapshot.id
+                                                                .toString(),
+                                                          );
+                                                          Navigator.pop(
+                                                              context);
+                                                        },
+                                                      ),
+                                                    ],
+                                                  ),
+                                                );
                                               },
                                             ),
                                             IconButton(
@@ -207,8 +235,9 @@ class ListCompany extends StatelessWidget {
                                                   MaterialPageRoute(
                                                     builder: (context) =>
                                                         CompanyProfile(
-                                                          id: docSnapshot.id.toString(),
-                                                        ),
+                                                      id: docSnapshot.id
+                                                          .toString(),
+                                                    ),
                                                   ),
                                                 );
                                               },

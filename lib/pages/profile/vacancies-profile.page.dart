@@ -42,7 +42,6 @@ class _VacanciesProfileState extends State<VacanciesProfile> {
 
   @override
   void dispose() {
-    super.dispose();
     areaAtuacaoController.dispose();
     horasController.dispose();
     salarioController.dispose();

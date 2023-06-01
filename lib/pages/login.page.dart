@@ -82,149 +82,151 @@ class _LoginPageState extends State<LoginPage> {
               ),
             ),
             Positioned.fill(
-              child: Container(
-                margin: EdgeInsets.fromLTRB(10, 160, 10, 30),
-                decoration: BoxDecoration(
-                  color: Color.fromARGB(255, 255, 255, 255),
-                  borderRadius: BorderRadius.all(
-                    Radius.circular(20),
+              child: SingleChildScrollView(
+                child: Container(
+                  margin: EdgeInsets.fromLTRB(10, 160, 10, 30),
+                  decoration: BoxDecoration(
+                    color: Color.fromARGB(255, 255, 255, 255),
+                    borderRadius: BorderRadius.all(
+                      Radius.circular(20),
+                    ),
                   ),
-                ),
-                child: Padding(
-                  padding: EdgeInsets.all(15),
-                  child: ListView(
-                    children: <Widget>[
-                      SizedBox(
-                        height: 10,
-                      ),
-                      Text(
-                        'Bem vindo!',
-                        textAlign: TextAlign.center,
-                        overflow: TextOverflow.ellipsis,
-                        style: const TextStyle(
-                            fontWeight: FontWeight.bold, fontSize: 28),
-                      ),
-                      Text(
-                        'Faça o login em sua conta.',
-                        textAlign: TextAlign.center,
-                        overflow: TextOverflow.ellipsis,
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 13,
-                          color: Colors.grey[400],
+                  child: Padding(
+                    padding: EdgeInsets.all(15),
+                    child: Column(
+                      children: <Widget>[
+                        SizedBox(
+                          height: 10,
                         ),
-                      ),
-                      SizedBox(
-                        height: 15,
-                      ),
-                      TextFormField(
-                        controller: _emailController,
-                        keyboardType: TextInputType.emailAddress,
-                        decoration: InputDecoration(
-                          labelText: "E-mail",
-                          prefixIcon: Icon(Icons.email),
-                          labelStyle: TextStyle(
-                            color: Colors.black38,
-                            fontWeight: FontWeight.w400,
-                            fontSize: 17,
+                        Text(
+                          'Bem vindo!',
+                          textAlign: TextAlign.center,
+                          overflow: TextOverflow.ellipsis,
+                          style: const TextStyle(
+                              fontWeight: FontWeight.bold, fontSize: 28),
+                        ),
+                        Text(
+                          'Faça o login em sua conta.',
+                          textAlign: TextAlign.center,
+                          overflow: TextOverflow.ellipsis,
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 13,
+                            color: Colors.grey[400],
                           ),
                         ),
-                        style: TextStyle(fontSize: 17),
-                      ),
-                      SizedBox(
-                        height: 10,
-                      ),
-                      TextFormField(
-                        controller: _passwordController,
-                        keyboardType: TextInputType.text,
-                        obscureText: true,
-                        decoration: InputDecoration(
-                          prefixIcon: Icon(Icons.lock),
-                          labelText: "Senha",
-                          labelStyle: TextStyle(
-                            color: Colors.black38,
-                            fontWeight: FontWeight.w400,
-                            fontSize: 17,
-                          ),
+                        SizedBox(
+                          height: 15,
                         ),
-                        style: TextStyle(fontSize: 17),
-                      ),
-                      Container(
-                        height: 40,
-                        alignment: Alignment.centerRight,
-                        child: TextButton(
-                          child: Text(
-                            "Recuperar Senha",
-                            textAlign: TextAlign.right,
+                        TextFormField(
+                          controller: _emailController,
+                          keyboardType: TextInputType.emailAddress,
+                          decoration: InputDecoration(
+                            labelText: "E-mail",
+                            prefixIcon: Icon(Icons.email),
+                            labelStyle: TextStyle(
+                              color: Colors.black38,
+                              fontWeight: FontWeight.w400,
+                              fontSize: 17,
+                            ),
                           ),
-                          onPressed: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => ResetPasswordPage(),
-                              ),
-                            );
-                          },
+                          style: TextStyle(fontSize: 17),
                         ),
-                      ),
-                      SizedBox(
-                        height: 30,
-                      ),
-                      Container(
-                        height: 50,
-                        alignment: Alignment.center,
-                        decoration: BoxDecoration(
-                          gradient: LinearGradient(
-                            begin: Alignment.topLeft,
-                            end: Alignment.bottomRight,
-                            stops: [0.3, 1],
-                            colors: [
-                              Color(0xFFF58524),
-                              Color(0XFFF92B7F),
-                            ],
-                          ),
-                          borderRadius: BorderRadius.all(
-                            Radius.circular(20),
-                          ),
+                        SizedBox(
+                          height: 10,
                         ),
-                        child: SizedBox.expand(
+                        TextFormField(
+                          controller: _passwordController,
+                          keyboardType: TextInputType.text,
+                          obscureText: true,
+                          decoration: InputDecoration(
+                            prefixIcon: Icon(Icons.lock),
+                            labelText: "Senha",
+                            labelStyle: TextStyle(
+                              color: Colors.black38,
+                              fontWeight: FontWeight.w400,
+                              fontSize: 17,
+                            ),
+                          ),
+                          style: TextStyle(fontSize: 17),
+                        ),
+                        Container(
+                          height: 40,
+                          alignment: Alignment.centerRight,
                           child: TextButton(
                             child: Text(
-                              "Login",
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                color: Colors.white,
-                                fontSize: 20,
-                              ),
+                              "Recuperar Senha",
+                              textAlign: TextAlign.right,
                             ),
                             onPressed: () {
-                              _signInWithEmailAndPassword();
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => ResetPasswordPage(),
+                                ),
+                              );
                             },
                           ),
                         ),
-                      ),
-                      SizedBox(
-                        height: 10,
-                      ),
-                      Container(
-                        height: 40,
-                        child: TextButton(
-                          child: Text(
-                            "Cadastre-se",
-                            textAlign: TextAlign.center,
-                          ),
-                          onPressed: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => SignupPage(),
-                              ),
-                            );
-                          },
+                        SizedBox(
+                          height: 30,
                         ),
-                      ),
-                    ],
+                        Container(
+                          height: 50,
+                          alignment: Alignment.center,
+                          decoration: BoxDecoration(
+                            gradient: LinearGradient(
+                              begin: Alignment.topLeft,
+                              end: Alignment.bottomRight,
+                              stops: [0.3, 1],
+                              colors: [
+                                Color(0xFFF58524),
+                                Color(0XFFF92B7F),
+                              ],
+                            ),
+                            borderRadius: BorderRadius.all(
+                              Radius.circular(20),
+                            ),
+                          ),
+                          child: SizedBox.expand(
+                            child: TextButton(
+                              child: Text(
+                                "Login",
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white,
+                                  fontSize: 20,
+                                ),
+                              ),
+                              onPressed: () {
+                                _signInWithEmailAndPassword();
+                              },
+                            ),
+                          ),
+                        ),
+                        SizedBox(
+                          height: 10,
+                        ),
+                        Container(
+                          height: 40,
+                          child: TextButton(
+                            child: Text(
+                              "Cadastre-se",
+                              textAlign: TextAlign.center,
+                            ),
+                            onPressed: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => SignupPage(),
+                                ),
+                              );
+                            },
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ),

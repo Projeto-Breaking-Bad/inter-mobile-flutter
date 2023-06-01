@@ -186,12 +186,40 @@ class ListUser extends StatelessWidget {
                                       DataCell(
                                         Row(
                                           children: [
-                                            IconButton(
-                                              icon: Icon(Icons.delete),
+                                            TextButton(
+                                              child: Icon(Icons.delete),
                                               onPressed: () {
-                                                deleteData(
-                                                  context,
-                                                  docSnapshot.id.toString(),
+                                                showDialog(
+                                                  context: context,
+                                                  builder: (context) =>
+                                                      AlertDialog(
+                                                    title:
+                                                        Text('Excluir Aluno'),
+                                                    content: Text(
+                                                      'Tem certeza de que deseja excluir este Aluno?',
+                                                    ),
+                                                    actions: [
+                                                      TextButton(
+                                                        child: Text('Cancelar'),
+                                                        onPressed: () {
+                                                          Navigator.pop(
+                                                              context);
+                                                        },
+                                                      ),
+                                                      TextButton(
+                                                        child: Text('Excluir'),
+                                                        onPressed: () {
+                                                          deleteData(
+                                                            context,
+                                                            docSnapshot.id
+                                                                .toString(),
+                                                          );
+                                                          Navigator.pop(
+                                                              context);
+                                                        },
+                                                      ),
+                                                    ],
+                                                  ),
                                                 );
                                               },
                                             ),

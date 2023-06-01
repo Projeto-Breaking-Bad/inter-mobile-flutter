@@ -144,14 +144,14 @@ class _CourseProfileState extends State<CourseProfile> {
                         ),
                       ),
                       Text(
-                        'Curso',
+                        'Atualizar Curso',
                         textAlign: TextAlign.center,
                         overflow: TextOverflow.ellipsis,
                         style: const TextStyle(
                             fontWeight: FontWeight.bold, fontSize: 25),
                       ),
                       Text(
-                        'Divulgue seu curso aqui!',
+                        'Atualizar Curso de Usuário logado no sistema',
                         textAlign: TextAlign.center,
                         overflow: TextOverflow.ellipsis,
                         style: TextStyle(

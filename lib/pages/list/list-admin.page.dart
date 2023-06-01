@@ -137,7 +137,7 @@ class ListAdmin extends StatelessWidget {
                                   ),
                                   DataColumn(
                                     label: Text(
-                                      'Instiuição  ',
+                                      'Instituição',
                                       style: TextStyle(
                                         fontSize: 15,
                                         fontWeight: FontWeight.bold,
@@ -187,12 +187,40 @@ class ListAdmin extends StatelessWidget {
                                       DataCell(
                                         Row(
                                           children: [
-                                            IconButton(
-                                              icon: Icon(Icons.delete),
+                                            TextButton(
+                                              child: Icon(Icons.delete),
                                               onPressed: () {
-                                                deleteData(
-                                                  context,
-                                                  docSnapshot.id.toString(),
+                                                showDialog(
+                                                  context: context,
+                                                  builder: (context) =>
+                                                      AlertDialog(
+                                                    title:
+                                                        Text('Excluir Admin'),
+                                                    content: Text(
+                                                      'Tem certeza de que deseja excluir este Admin?',
+                                                    ),
+                                                    actions: [
+                                                      TextButton(
+                                                        child: Text('Cancelar'),
+                                                        onPressed: () {
+                                                          Navigator.pop(
+                                                              context);
+                                                        },
+                                                      ),
+                                                      TextButton(
+                                                        child: Text('Excluir'),
+                                                        onPressed: () {
+                                                          deleteData(
+                                                            context,
+                                                            docSnapshot.id
+                                                                .toString(),
+                                                          );
+                                                          Navigator.pop(
+                                                              context);
+                                                        },
+                                                      ),
+                                                    ],
+                                                  ),
                                                 );
                                               },
                                             ),
