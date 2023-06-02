@@ -2,6 +2,7 @@ import 'package:caca_talentos/pages/components/CustomDrawer.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:caca_talentos/pages/home.page.dart';
+import 'package:caca_talentos/pages/list/list-user.page.dart';
 
 class UserProfile extends StatefulWidget {
   final String id;
@@ -58,7 +59,7 @@ class _UserProfileState extends State<UserProfile> {
     }
   }
 
-  updateData() {
+  updateData(BuildContext context) {
     DocumentReference documentReference =
         FirebaseFirestore.instance.collection("aluno").doc(widget.id);
 
@@ -72,7 +73,27 @@ class _UserProfileState extends State<UserProfile> {
     };
 
     documentReference.update(alunos).then((_) {
-      print("$nome atualizado com sucesso.");
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: const Text('Atualização realizado'),
+            content: Text('Usuário atualizado com sucesso.'),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => ListUser()),
+                  );
+                },
+                child: const Text('OK'),
+              ),
+            ],
+          );
+        },
+      );
     }).catchError((error) {
       print("Erro ao atualizar $nome: $error");
     });
@@ -122,7 +143,11 @@ class _UserProfileState extends State<UserProfile> {
                           child: SizedBox(
                             width: 80,
                             height: 80,
-                            child: Image.asset("assets/user.png"),
+                            child: Icon(
+                              Icons.person,
+                              size: 80,
+                              color: Colors.grey,
+                            ),
                           ),
                         ),
                       ),
@@ -260,7 +285,7 @@ class _UserProfileState extends State<UserProfile> {
                                 textAlign: TextAlign.center,
                               ),
                               onPressed: () {
-                                updateData();
+                                updateData(context);
                               },
                             ),
                           ),

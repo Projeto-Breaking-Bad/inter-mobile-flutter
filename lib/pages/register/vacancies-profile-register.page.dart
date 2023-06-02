@@ -1,3 +1,4 @@
+import 'package:caca_talentos/pages/list/list-vacancies.page.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:caca_talentos/pages/components/CustomDrawer.dart';
@@ -39,7 +40,7 @@ class VacanciesProfileRegister extends StatelessWidget {
     this.quantVagas = quantVagas;
   }
 
-  createData() {
+  createData(BuildContext context) {
     CollectionReference collectionReference =
         FirebaseFirestore.instance.collection("vaga");
 
@@ -55,7 +56,27 @@ class VacanciesProfileRegister extends StatelessWidget {
     };
 
     collectionReference.add(vagas).then((value) {
-      print("$cnpj cadastrado com sucesso. ID: ${value.id}");
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: const Text('Cadastro realizado'),
+            content: Text('Vaga cadastrada com sucesso.'),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => ListVacancies()),
+                  );
+                },
+                child: const Text('OK'),
+              ),
+            ],
+          );
+        },
+      );
     }).catchError((error) {
       print("Falha ao cadastrar o usuário: $error");
     });
@@ -105,7 +126,11 @@ class VacanciesProfileRegister extends StatelessWidget {
                           child: SizedBox(
                             width: 80,
                             height: 80,
-                            child: Image.asset("assets/user.png"),
+                            child: Icon(
+                              Icons.book,
+                              size: 80,
+                              color: Colors.grey,
+                            ),
                           ),
                         ),
                       ),
@@ -292,7 +317,7 @@ class VacanciesProfileRegister extends StatelessWidget {
                                 textAlign: TextAlign.center,
                               ),
                               onPressed: () {
-                                createData();
+                                createData(context);
                               },
                             ),
                           ),

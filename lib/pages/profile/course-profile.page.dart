@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:caca_talentos/pages/components/CustomDrawer.dart';
+import 'package:caca_talentos/pages/list/list-course.page.dart';
 
 class CourseProfile extends StatefulWidget {
   final String id;
@@ -73,7 +74,7 @@ class _CourseProfileState extends State<CourseProfile> {
     }
   }
 
-  updateData() {
+  updateData(BuildContext context) {
     DocumentReference documentReference =
         FirebaseFirestore.instance.collection("curso").doc(widget.id);
 
@@ -89,7 +90,27 @@ class _CourseProfileState extends State<CourseProfile> {
     };
 
     documentReference.set(vagas).then((_) {
-      print("$nomeCurso atualizado com sucesso.");
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: const Text('Atualização realizado'),
+            content: Text('Curso atualizado com sucesso.'),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => ListCourse()),
+                  );
+                },
+                child: const Text('OK'),
+              ),
+            ],
+          );
+        },
+      );
     }).catchError((error) {
       print("Erro ao atualizar $nomeCurso: $error");
     });
@@ -139,7 +160,11 @@ class _CourseProfileState extends State<CourseProfile> {
                           child: SizedBox(
                             width: 80,
                             height: 80,
-                            child: Image.asset("assets/user.png"),
+                            child: Icon(
+                              Icons.article,
+                              size: 80,
+                              color: Colors.grey,
+                            ),
                           ),
                         ),
                       ),
@@ -329,7 +354,7 @@ class _CourseProfileState extends State<CourseProfile> {
                                 textAlign: TextAlign.center,
                               ),
                               onPressed: () {
-                                updateData();
+                                updateData(context);
                               },
                             ),
                           ),

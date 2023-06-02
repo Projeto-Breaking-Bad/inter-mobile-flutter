@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:caca_talentos/pages/components/CustomDrawer.dart';
+import 'package:caca_talentos/pages/list/list-vacancies.page.dart';
 
 class VacanciesProfile extends StatefulWidget {
   final String id;
@@ -78,7 +79,7 @@ class _VacanciesProfileState extends State<VacanciesProfile> {
     }
   }
 
-  updateData() {
+  updateData(BuildContext context) {
     DocumentReference documentReference =
         FirebaseFirestore.instance.collection("vaga").doc(widget.id);
 
@@ -95,7 +96,27 @@ class _VacanciesProfileState extends State<VacanciesProfile> {
     };
 
     documentReference.update(vagas).then((_) {
-      print("$areaAtuacao atualizado com sucesso.");
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: const Text('Atualização realizada'),
+            content: Text('Vaga atualizada com sucesso.'),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => ListVacancies()),
+                  );
+                },
+                child: const Text('OK'),
+              ),
+            ],
+          );
+        },
+      );
     }).catchError((error) {
       print("Erro ao atualizar $areaAtuacao: $error");
     });
@@ -145,7 +166,11 @@ class _VacanciesProfileState extends State<VacanciesProfile> {
                           child: SizedBox(
                             width: 80,
                             height: 80,
-                            child: Image.asset("assets/user.png"),
+                            child: Icon(
+                              Icons.book,
+                              size: 80,
+                              color: Colors.grey,
+                            ),
                           ),
                         ),
                       ),
@@ -352,7 +377,7 @@ class _VacanciesProfileState extends State<VacanciesProfile> {
                                 textAlign: TextAlign.center,
                               ),
                               onPressed: () {
-                                updateData();
+                                updateData(context);
                               },
                             ),
                           ),

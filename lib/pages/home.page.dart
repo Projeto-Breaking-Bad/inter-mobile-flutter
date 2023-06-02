@@ -13,7 +13,7 @@ class HomePage extends StatelessWidget {
       ),
       drawer: CustomDrawer(context), // Adicione o CustomDrawer aqui
       body: const Center(
-        child: Text('My Page!'),
+        child: Text('Em Desenvolvimento!'),
       ),
     );
   }

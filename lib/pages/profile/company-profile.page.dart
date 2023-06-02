@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:caca_talentos/pages/components/CustomDrawer.dart';
 import 'package:caca_talentos/pages/home.page.dart';
+import 'package:caca_talentos/pages/list/list-company.page.dart';
 
 class CompanyProfile extends StatefulWidget {
   final String id;
@@ -58,7 +59,7 @@ class _CompanyProfileState extends State<CompanyProfile> {
     }
   }
 
-  updateData() {
+  updateData(BuildContext context) {
     DocumentReference documentReference =
         FirebaseFirestore.instance.collection("empresa").doc(widget.id);
 
@@ -72,7 +73,27 @@ class _CompanyProfileState extends State<CompanyProfile> {
     };
 
     documentReference.update(empresas).then((_) {
-      print("$nome atualizado com sucesso.");
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: const Text('Atualização realizado'),
+            content: Text('Empresa atualizada com sucesso.'),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => ListCompany()),
+                  );
+                },
+                child: const Text('OK'),
+              ),
+            ],
+          );
+        },
+      );
     }).catchError((error) {
       print("Erro ao atualizar $nome: $error");
     });
@@ -122,7 +143,11 @@ class _CompanyProfileState extends State<CompanyProfile> {
                           child: SizedBox(
                             width: 80,
                             height: 80,
-                            child: Image.asset("assets/user.png"),
+                            child: Icon(
+                              Icons.article,
+                              size: 80,
+                              color: Colors.grey,
+                            ),
                           ),
                         ),
                       ),
@@ -270,7 +295,7 @@ class _CompanyProfileState extends State<CompanyProfile> {
                                 textAlign: TextAlign.center,
                               ),
                               onPressed: () {
-                                updateData();
+                                updateData(context);
                               },
                             ),
                           ),

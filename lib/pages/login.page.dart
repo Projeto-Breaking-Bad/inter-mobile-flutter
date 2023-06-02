@@ -98,6 +98,18 @@ class _LoginPageState extends State<LoginPage> {
                         SizedBox(
                           height: 10,
                         ),
+                        Positioned(
+                          top: 0,
+                          left: 0,
+                          right: 0,
+                          child: Center(
+                            child: SizedBox(
+                              width: 80,
+                              height: 80,
+                              child: Image.asset("assets/user.png"),
+                            ),
+                          ),
+                        ),
                         Text(
                           'Bem vindo!',
                           textAlign: TextAlign.center,

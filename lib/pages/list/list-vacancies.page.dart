@@ -69,7 +69,11 @@ class ListVacancies extends StatelessWidget {
                           child: SizedBox(
                             width: 80,
                             height: 80,
-                            child: Image.asset("assets/user.png"),
+                            child: Icon(
+                              Icons.book,
+                              size: 80,
+                              color: Colors.grey,
+                            ),
                           ),
                         ),
                       ),
@@ -205,8 +209,7 @@ class ListVacancies extends StatelessWidget {
                                                   context: context,
                                                   builder: (context) =>
                                                       AlertDialog(
-                                                    title:
-                                                        Text('Excluir Vaga'),
+                                                    title: Text('Excluir Vaga'),
                                                     content: Text(
                                                       'Tem certeza de que deseja excluir este Vaga?',
                                                     ),

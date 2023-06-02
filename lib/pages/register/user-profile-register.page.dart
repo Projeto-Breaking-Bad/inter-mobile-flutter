@@ -1,4 +1,5 @@
 import 'package:caca_talentos/pages/components/CustomDrawer.dart';
+import 'package:caca_talentos/pages/list/list-user.page.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:caca_talentos/pages/home.page.dart';
@@ -22,7 +23,7 @@ class UserProfileRegister extends StatelessWidget {
     this.senha = senha;
   }
 
-  createData() {
+  createData(BuildContext context) {
     CollectionReference collectionReference =
         FirebaseFirestore.instance.collection("aluno");
 
@@ -35,7 +36,27 @@ class UserProfileRegister extends StatelessWidget {
     };
 
     collectionReference.add(aluno).then((value) {
-      print("$nome cadastrado com sucesso. ID: ${value.id}");
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: const Text('Cadastro realizado'),
+            content: Text('Usuário cadastrado com sucesso.'),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => ListUser()),
+                  );
+                },
+                child: const Text('OK'),
+              ),
+            ],
+          );
+        },
+      );
     }).catchError((error) {
       print("Falha ao cadastrar o usuário: $error");
     });
@@ -85,7 +106,11 @@ class UserProfileRegister extends StatelessWidget {
                           child: SizedBox(
                             width: 80,
                             height: 80,
-                            child: Image.asset("assets/user.png"),
+                            child: Icon(
+                              Icons.person,
+                              size: 80,
+                              color: Colors.grey,
+                            ),
                           ),
                         ),
                       ),
@@ -221,7 +246,7 @@ class UserProfileRegister extends StatelessWidget {
                                 textAlign: TextAlign.center,
                               ),
                               onPressed: () {
-                                createData();
+                                createData(context);
                               },
                             ),
                           ),
