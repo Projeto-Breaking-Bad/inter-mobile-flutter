@@ -44,39 +44,39 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions web = FirebaseOptions(
-    apiKey: 'AIzaSyAHwyD62BOUAiMfmHWzPK5DEUHESB2agcQ',
-    appId: '1:216179238716:web:8170aaeba6a64ff6496039',
-    messagingSenderId: '216179238716',
-    projectId: 'cacatalentosmobile',
-    authDomain: 'cacatalentosmobile.firebaseapp.com',
-    storageBucket: 'cacatalentosmobile.appspot.com',
+    apiKey: 'AIzaSyCwWVwZPaOutRUaN3YGzq1amOj7vNGodmI',
+    appId: '1:18927112924:web:bdfc1cd6e4c70711231a19',
+    messagingSenderId: '18927112924',
+    projectId: 'cacatalentosmobile2-2ffaf',
+    authDomain: 'cacatalentosmobile2-2ffaf.firebaseapp.com',
+    storageBucket: 'cacatalentosmobile2-2ffaf.appspot.com',
   );
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyDFLVWKQEaMheY7xzn018X8ESMVNf0AsqQ',
-    appId: '1:216179238716:android:e25eaec9d4c94c3d496039',
-    messagingSenderId: '216179238716',
-    projectId: 'cacatalentosmobile',
-    storageBucket: 'cacatalentosmobile.appspot.com',
+    apiKey: 'AIzaSyBWsjJRos7HG5hrXYGHqfIt1yaUUp_exIU',
+    appId: '1:18927112924:android:f423dd3a2ee1e689231a19',
+    messagingSenderId: '18927112924',
+    projectId: 'cacatalentosmobile2-2ffaf',
+    storageBucket: 'cacatalentosmobile2-2ffaf.appspot.com',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyBkfDEAwg22QOjOccQGyq5cfEeqS5MW4W8',
-    appId: '1:216179238716:ios:8429082f101be978496039',
-    messagingSenderId: '216179238716',
-    projectId: 'cacatalentosmobile',
-    storageBucket: 'cacatalentosmobile.appspot.com',
-    iosClientId: '216179238716-dfb0jhu94afo32h2o752uqs4mbp6pt4b.apps.googleusercontent.com',
+    apiKey: 'AIzaSyD4-RUrURJrexdhC5ieDOZoJiEcIfM9cPc',
+    appId: '1:18927112924:ios:f1a88fe0d22d159c231a19',
+    messagingSenderId: '18927112924',
+    projectId: 'cacatalentosmobile2-2ffaf',
+    storageBucket: 'cacatalentosmobile2-2ffaf.appspot.com',
+    iosClientId: '18927112924-t6l16m7p8hvdqk0ejh7fmv6o8n1tafob.apps.googleusercontent.com',
     iosBundleId: 'com.example.cacaTalentos',
   );
 
   static const FirebaseOptions macos = FirebaseOptions(
-    apiKey: 'AIzaSyBkfDEAwg22QOjOccQGyq5cfEeqS5MW4W8',
-    appId: '1:216179238716:ios:e4ce43545f73b312496039',
-    messagingSenderId: '216179238716',
-    projectId: 'cacatalentosmobile',
-    storageBucket: 'cacatalentosmobile.appspot.com',
-    iosClientId: '216179238716-j2d461ouqkao0e2jit5m6d1pn60oe158.apps.googleusercontent.com',
+    apiKey: 'AIzaSyD4-RUrURJrexdhC5ieDOZoJiEcIfM9cPc',
+    appId: '1:18927112924:ios:f3102c9b44882653231a19',
+    messagingSenderId: '18927112924',
+    projectId: 'cacatalentosmobile2-2ffaf',
+    storageBucket: 'cacatalentosmobile2-2ffaf.appspot.com',
+    iosClientId: '18927112924-ce7btdct8oku01lidrkb3lkgmnu5td7p.apps.googleusercontent.com',
     iosBundleId: 'com.example.cacaTalentos.RunnerTests',
   );
 }
