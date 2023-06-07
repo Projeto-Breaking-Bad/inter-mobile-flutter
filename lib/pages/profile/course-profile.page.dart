@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:caca_talentos/pages/components/CustomDrawer.dart';
 import 'package:caca_talentos/pages/list/list-course.page.dart';
+import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 
 class CourseProfile extends StatefulWidget {
   final String id;
@@ -116,6 +117,11 @@ class _CourseProfileState extends State<CourseProfile> {
     });
   }
 
+  var maskHora = new MaskTextInputFormatter(
+    mask: '##:##',
+    filter: {'#': RegExp(r'[0-9]')},
+    type: MaskAutoCompletionType.lazy);
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -214,7 +220,8 @@ class _CourseProfileState extends State<CourseProfile> {
                       TextFormField(
                         // autofocus: true,
                         controller: horaCursoController,
-                        keyboardType: TextInputType.text,
+                        keyboardType: TextInputType.number,
+                        inputFormatters: [maskHora],
                         decoration: InputDecoration(
                           labelText: "Horário do Curso",
                           prefixIcon: Icon(Icons.access_alarm),
