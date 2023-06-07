@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:caca_talentos/pages/signup.page.dart';
+import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 
 class SignupCompanyPage extends StatelessWidget {
   late String nome, cnpj, email, senha;
@@ -21,9 +22,9 @@ class SignupCompanyPage extends StatelessWidget {
     this.senha = senha;
   }
 
-  createData() {
-    DocumentReference documentReference =
-        FirebaseFirestore.instance.collection("empresa").doc(cnpj);
+  createData(BuildContext context) async {
+    CollectionReference collectionReference =
+        FirebaseFirestore.instance.collection("empresa");
 
     // create Map
     Map<String, dynamic> empresas = {
@@ -33,10 +34,51 @@ class SignupCompanyPage extends StatelessWidget {
       "senha": senha,
     };
 
-    documentReference.set(empresas).whenComplete(() {
-      print("$cnpj cadastrado com sucesso.");
-    });
+    try {
+      await collectionReference.add(empresas);
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text('Cadastro realizado com sucesso'),
+            actions: [
+              ElevatedButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                child: Text('OK'),
+              ),
+            ],
+          );
+        },
+      );
+    } catch (e) {
+      print('Erro ao cadastrar empresa: $e');
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text('Erro ao cadastrar empresa'),
+            content: Text(
+                'Ocorreu um erro ao cadastrar a empresa. Por favor, tente novamente.'),
+            actions: [
+              ElevatedButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                child: Text('OK'),
+              ),
+            ],
+          );
+        },
+      );
+    }
   }
+
+  var maskFormatter = new MaskTextInputFormatter(
+      mask: '##.###.###/####-##',
+      filter: {'#': RegExp(r'[0-9]')},
+      type: MaskAutoCompletionType.lazy);
 
   @override
   Widget build(BuildContext context) {
@@ -65,8 +107,7 @@ class SignupCompanyPage extends StatelessWidget {
             ),
             Positioned.fill(
               child: Container(
-                // margin: EdgeInsets.only(top: 170),
-                margin: EdgeInsets.fromLTRB(10, 160, 10, 30),
+                margin: EdgeInsets.only(top: 150),
                 decoration: BoxDecoration(
                   color: Color.fromARGB(255, 255, 255, 255),
                   borderRadius: BorderRadius.all(
@@ -128,7 +169,7 @@ class SignupCompanyPage extends StatelessWidget {
                       ),
                       TextFormField(
                         // autofocus: true,
-                        keyboardType: TextInputType.emailAddress,
+                        keyboardType: TextInputType.text,
                         decoration: InputDecoration(
                           labelText: "Nome",
                           prefixIcon: Icon(Icons.people),
@@ -148,6 +189,7 @@ class SignupCompanyPage extends StatelessWidget {
                       ),
                       TextFormField(
                         // autofocus: true,
+                        inputFormatters: [maskFormatter],
                         keyboardType: TextInputType.number,
                         decoration: InputDecoration(
                           labelText: "CNPJ",
@@ -236,7 +278,7 @@ class SignupCompanyPage extends StatelessWidget {
                               textAlign: TextAlign.center,
                             ),
                             onPressed: () {
-                              createData();
+                              createData(context);
                             },
                           ),
                         ),
