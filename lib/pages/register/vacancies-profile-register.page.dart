@@ -2,6 +2,7 @@ import 'package:caca_talentos/pages/list/list-vacancies.page.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:caca_talentos/pages/components/CustomDrawer.dart';
+import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 
 class VacanciesProfileRegister extends StatelessWidget {
   late String cnpj,
@@ -82,6 +83,16 @@ class VacanciesProfileRegister extends StatelessWidget {
     });
   }
 
+  var maskCnpj = new MaskTextInputFormatter(
+      mask: '##.###.###/####-##',
+      filter: {'#': RegExp(r'[0-9]')},
+      type: MaskAutoCompletionType.lazy);
+
+  var maskHora = new MaskTextInputFormatter(
+      mask: '##:##',
+      filter: {'#': RegExp(r'[0-9]')},
+      type: MaskAutoCompletionType.lazy);
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -156,7 +167,8 @@ class VacanciesProfileRegister extends StatelessWidget {
                       ),
                       TextFormField(
                         // autofocus: true,
-                        keyboardType: TextInputType.emailAddress,
+                        keyboardType: TextInputType.number,
+                        inputFormatters: [maskCnpj],
                         decoration: InputDecoration(
                           labelText: "CNPJ",
                           prefixIcon: Icon(Icons.people),
@@ -196,7 +208,8 @@ class VacanciesProfileRegister extends StatelessWidget {
                       ),
                       TextFormField(
                         // autofocus: true,
-                        keyboardType: TextInputType.text,
+                        keyboardType: TextInputType.number,
+                        inputFormatters: [maskHora],
                         decoration: InputDecoration(
                           prefixIcon: Icon(Icons.timer),
                           labelText: "Horas",
@@ -213,7 +226,7 @@ class VacanciesProfileRegister extends StatelessWidget {
                       ),
                       TextFormField(
                         // autofocus: true,
-                        keyboardType: TextInputType.text,
+                        keyboardType: TextInputType.number,
                         decoration: InputDecoration(
                           prefixIcon: Icon(Icons.money),
                           labelText: "Salário",
@@ -251,7 +264,7 @@ class VacanciesProfileRegister extends StatelessWidget {
                       ),
                       TextFormField(
                         // autofocus: true,
-                        keyboardType: TextInputType.text,
+                        keyboardType: TextInputType.number,
                         decoration: InputDecoration(
                           prefixIcon: Icon(Icons.add_chart),
                           labelText: "Quantidade de Vagas",
