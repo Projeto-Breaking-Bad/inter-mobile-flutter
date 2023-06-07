@@ -3,6 +3,7 @@ import 'package:caca_talentos/pages/list/list-company.page.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:caca_talentos/pages/signup.page.dart';
+import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 
 class CompanyProfileRegister extends StatelessWidget {
   late String nome, cnpj, email, senha;
@@ -61,6 +62,11 @@ class CompanyProfileRegister extends StatelessWidget {
       print("Erro ao cadastrar empresa: $error");
     });
   }
+
+  var maskFormatter = new MaskTextInputFormatter(
+      mask: '##.###.###/####-##',
+      filter: {'#': RegExp(r'[0-9]')},
+      type: MaskAutoCompletionType.lazy);
 
   @override
   Widget build(BuildContext context) {
@@ -157,6 +163,7 @@ class CompanyProfileRegister extends StatelessWidget {
                       TextFormField(
                         // autofocus: true,
                         keyboardType: TextInputType.number,
+                        inputFormatters: [maskFormatter],
                         decoration: InputDecoration(
                           labelText: "CNPJ",
                           prefixIcon: Icon(Icons.card_membership_sharp),
