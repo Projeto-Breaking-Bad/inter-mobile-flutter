@@ -2,6 +2,7 @@ import 'package:caca_talentos/pages/list/list-course.page.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:caca_talentos/pages/components/CustomDrawer.dart';
+import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 
 class CourseProfileRegister extends StatelessWidget {
   late String nomeCurso,
@@ -75,6 +76,11 @@ class CourseProfileRegister extends StatelessWidget {
       print("Erro ao cadastrar o curso $error");
     });
   }
+
+  var maskHora = new MaskTextInputFormatter(
+      mask: '##:##',
+      filter: {'#': RegExp(r'[0-9]')},
+      type: MaskAutoCompletionType.lazy);
 
   @override
   Widget build(BuildContext context) {
@@ -170,7 +176,8 @@ class CourseProfileRegister extends StatelessWidget {
                       ),
                       TextFormField(
                         // autofocus: true,
-                        keyboardType: TextInputType.text,
+                        keyboardType: TextInputType.number,
+                        inputFormatters: [maskHora],
                         decoration: InputDecoration(
                           labelText: "Horário do Curso",
                           prefixIcon: Icon(Icons.access_alarm),
@@ -244,7 +251,7 @@ class CourseProfileRegister extends StatelessWidget {
                       ),
                       TextFormField(
                         // autofocus: true,
-                        keyboardType: TextInputType.text,
+                        keyboardType: TextInputType.number,
                         decoration: InputDecoration(
                           prefixIcon: Icon(Icons.format_list_numbered_rounded),
                           labelText: "Quantidade de Vagas",
