@@ -1,107 +1,68 @@
+import 'package:caca_talentos/pages/list/list-vacancies.page.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:caca_talentos/pages/components/CustomDrawer.dart';
-import 'package:caca_talentos/pages/list/list-vacancies.page.dart';
+import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 
-class VacanciesProfile extends StatefulWidget {
-  final String id;
-
-  VacanciesProfile({required this.id});
-
-  @override
-  _VacanciesProfileState createState() => _VacanciesProfileState();
-}
-
-class _VacanciesProfileState extends State<VacanciesProfile> {
-  late String areaAtuacao,
+class VacanciesProfileRegister extends StatelessWidget {
+  late String cnpj,
+      areaAtuacao,
       horas,
       salario,
       descricao,
       requisitos,
-      cnpj,
       quantVagas;
-  late TextEditingController areaAtuacaoController;
-  late TextEditingController horasController;
-  late TextEditingController salarioController;
-  late TextEditingController descricaoController;
-  late TextEditingController requisitosController;
-  late TextEditingController cnpjController;
-  late TextEditingController quantVagasController;
 
-  @override
-  void initState() {
-    super.initState();
-    areaAtuacaoController = TextEditingController();
-    horasController = TextEditingController();
-    salarioController = TextEditingController();
-    descricaoController = TextEditingController();
-    requisitosController = TextEditingController();
-    cnpjController = TextEditingController();
-    quantVagasController = TextEditingController();
-    fetchVacancies();
+  getCnpj(cnpj) {
+    this.cnpj = cnpj;
   }
 
-  @override
-  void dispose() {
-    areaAtuacaoController.dispose();
-    horasController.dispose();
-    salarioController.dispose();
-    descricaoController.dispose();
-    requisitosController.dispose();
-    cnpjController.dispose();
-    quantVagasController.dispose();
-    super.dispose();
+  getAreaAtuacao(areaAtuacao) {
+    this.areaAtuacao = areaAtuacao;
   }
 
-  fetchVacancies() async {
-    DocumentSnapshot snapshot = await FirebaseFirestore.instance
-        .collection("vaga")
-        .doc(widget.id)
-        .get();
-
-    if (snapshot.exists) {
-      setState(() {
-        areaAtuacao = snapshot['areaAtuacao'];
-        horas = snapshot['horas'];
-        salario = snapshot['salario'];
-        descricao = snapshot['descricao'];
-        requisitos = snapshot['requisitos'];
-        cnpj = snapshot['cnpj'];
-        quantVagas = snapshot['quantVagas'];
-        areaAtuacaoController.text = areaAtuacao;
-        horasController.text = horas;
-        salarioController.text = salario;
-        descricaoController.text = descricao;
-        requisitosController.text = requisitos;
-        cnpjController.text = cnpj;
-        quantVagasController.text = quantVagas;
-      });
-    }
+  getHoras(horas) {
+    this.horas = horas;
   }
 
-  updateData(BuildContext context) {
-    DocumentReference documentReference =
-        FirebaseFirestore.instance.collection("vaga").doc(widget.id);
+  getSalario(salario) {
+    this.salario = salario;
+  }
+
+  getDescricao(descricao) {
+    this.descricao = descricao;
+  }
+
+  getRequisitos(requisitos) {
+    this.requisitos = requisitos;
+  }
+
+  getQuantVagas(quantVagas) {
+    this.quantVagas = quantVagas;
+  }
+
+  createData(BuildContext context) {
+    CollectionReference collectionReference =
+        FirebaseFirestore.instance.collection("vaga");
 
     // create Map
     Map<String, dynamic> vagas = {
-      "areaAtuacao": areaAtuacao,
       "cnpj": cnpj,
+      "areaAtuacao": areaAtuacao,
       "horas": horas,
       "salario": salario,
       "descricao": descricao,
       "requisitos": requisitos,
       "quantVagas": quantVagas,
-      "id": widget.id,
     };
 
-    documentReference.update(vagas).then((_) {
+    collectionReference.add(vagas).then((value) {
       showDialog(
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(
-            title: const Text('Atualização realizada'),
-            content: Text('Vaga atualizada com sucesso.'),
+            title: const Text('Cadastro realizado'),
+            content: Text('Vaga cadastrada com sucesso.'),
             actions: [
               TextButton(
                 onPressed: () {
@@ -118,9 +79,19 @@ class _VacanciesProfileState extends State<VacanciesProfile> {
         },
       );
     }).catchError((error) {
-      print("Erro ao atualizar $areaAtuacao: $error");
+      print("Falha ao cadastrar o usuário: $error");
     });
   }
+
+  var maskCnpj = new MaskTextInputFormatter(
+      mask: '##.###.###/####-##',
+      filter: {'#': RegExp(r'[0-9]')},
+      type: MaskAutoCompletionType.lazy);
+
+  var maskHora = new MaskTextInputFormatter(
+      mask: '##:##',
+      filter: {'#': RegExp(r'[0-9]')},
+      type: MaskAutoCompletionType.lazy);
 
   @override
   Widget build(BuildContext context) {
@@ -196,8 +167,8 @@ class _VacanciesProfileState extends State<VacanciesProfile> {
                       ),
                       TextFormField(
                         // autofocus: true,
-                        controller: cnpjController,
-                        keyboardType: TextInputType.emailAddress,
+                        keyboardType: TextInputType.number,
+                        inputFormatters: [maskCnpj],
                         decoration: InputDecoration(
                           labelText: "CNPJ",
                           prefixIcon: Icon(Icons.people),
@@ -208,9 +179,7 @@ class _VacanciesProfileState extends State<VacanciesProfile> {
                           ),
                         ),
                         onChanged: (String cnpj) {
-                          setState(() {
-                            this.cnpj = cnpj;
-                          });
+                          getCnpj(cnpj);
                         },
                         style: TextStyle(fontSize: 17),
                       ),
@@ -219,7 +188,6 @@ class _VacanciesProfileState extends State<VacanciesProfile> {
                       ),
                       TextFormField(
                         // autofocus: true,
-                        controller: areaAtuacaoController,
                         keyboardType: TextInputType.text,
                         decoration: InputDecoration(
                           labelText: "Área de Atuação",
@@ -231,9 +199,7 @@ class _VacanciesProfileState extends State<VacanciesProfile> {
                           ),
                         ),
                         onChanged: (String areaAtuacao) {
-                          setState(() {
-                            this.areaAtuacao = areaAtuacao;
-                          });
+                          getAreaAtuacao(areaAtuacao);
                         },
                         style: TextStyle(fontSize: 17),
                       ),
@@ -242,8 +208,8 @@ class _VacanciesProfileState extends State<VacanciesProfile> {
                       ),
                       TextFormField(
                         // autofocus: true,
-                        controller: horasController,
-                        keyboardType: TextInputType.text,
+                        keyboardType: TextInputType.number,
+                        inputFormatters: [maskHora],
                         decoration: InputDecoration(
                           prefixIcon: Icon(Icons.timer),
                           labelText: "Horas",
@@ -254,16 +220,13 @@ class _VacanciesProfileState extends State<VacanciesProfile> {
                           ),
                         ),
                         onChanged: (String horas) {
-                          setState(() {
-                            this.horas = horas;
-                          });
+                          getHoras(horas);
                         },
                         style: TextStyle(fontSize: 17),
                       ),
                       TextFormField(
                         // autofocus: true,
-                        controller: salarioController,
-                        keyboardType: TextInputType.text,
+                        keyboardType: TextInputType.number,
                         decoration: InputDecoration(
                           prefixIcon: Icon(Icons.money),
                           labelText: "Salário",
@@ -274,9 +237,7 @@ class _VacanciesProfileState extends State<VacanciesProfile> {
                           ),
                         ),
                         onChanged: (String salario) {
-                          setState(() {
-                            this.salario = salario;
-                          });
+                          getSalario(salario);
                         },
                         style: TextStyle(fontSize: 17),
                       ),
@@ -285,8 +246,8 @@ class _VacanciesProfileState extends State<VacanciesProfile> {
                       ),
                       TextFormField(
                         // autofocus: true,
-                        controller: requisitosController,
                         keyboardType: TextInputType.text,
+                        obscureText: true,
                         decoration: InputDecoration(
                           prefixIcon: Icon(Icons.list_alt),
                           labelText: "Requisitos",
@@ -297,16 +258,13 @@ class _VacanciesProfileState extends State<VacanciesProfile> {
                           ),
                         ),
                         onChanged: (String requisitos) {
-                          setState(() {
-                            this.requisitos = requisitos;
-                          });
+                          getRequisitos(requisitos);
                         },
                         style: TextStyle(fontSize: 17),
                       ),
                       TextFormField(
                         // autofocus: true,
-                        controller: quantVagasController,
-                        keyboardType: TextInputType.text,
+                        keyboardType: TextInputType.number,
                         decoration: InputDecoration(
                           prefixIcon: Icon(Icons.add_chart),
                           labelText: "Quantidade de Vagas",
@@ -317,15 +275,12 @@ class _VacanciesProfileState extends State<VacanciesProfile> {
                           ),
                         ),
                         onChanged: (String quantVagas) {
-                          setState(() {
-                            this.quantVagas = quantVagas;
-                          });
+                          getQuantVagas(quantVagas);
                         },
                         style: TextStyle(fontSize: 17),
                       ),
                       TextFormField(
                         // autofocus: true,
-                        controller: descricaoController,
                         keyboardType: TextInputType.text,
                         decoration: InputDecoration(
                           prefixIcon: Icon(Icons.description),
@@ -337,9 +292,7 @@ class _VacanciesProfileState extends State<VacanciesProfile> {
                           ),
                         ),
                         onChanged: (String descricao) {
-                          setState(() {
-                            this.descricao = descricao;
-                          });
+                          getDescricao(descricao);
                         },
                         style: TextStyle(fontSize: 17),
                       ),
@@ -368,7 +321,7 @@ class _VacanciesProfileState extends State<VacanciesProfile> {
                             ),
                             child: TextButton(
                               child: Text(
-                                "Atualizar",
+                                "Cadastrar",
                                 style: TextStyle(
                                   fontWeight: FontWeight.bold,
                                   color: Colors.white,
@@ -377,7 +330,7 @@ class _VacanciesProfileState extends State<VacanciesProfile> {
                                 textAlign: TextAlign.center,
                               ),
                               onPressed: () {
-                                updateData(context);
+                                createData(context);
                               },
                             ),
                           ),
