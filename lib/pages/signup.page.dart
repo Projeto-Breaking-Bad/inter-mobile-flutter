@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:caca_talentos/pages/signup-company.page.dart';
+import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 
 class SignupPage extends StatelessWidget {
   late String nome, cpf, email, senha;
@@ -21,9 +22,9 @@ class SignupPage extends StatelessWidget {
     this.senha = senha;
   }
 
-  createData() {
-    DocumentReference documentReference =
-        FirebaseFirestore.instance.collection("aluno").doc(cpf);
+  createData(BuildContext context) async {
+    CollectionReference collectionReference =
+        FirebaseFirestore.instance.collection("aluno");
 
     // create Map
     Map<String, dynamic> alunos = {
@@ -33,15 +34,55 @@ class SignupPage extends StatelessWidget {
       "senha": senha,
     };
 
-    documentReference.set(alunos).whenComplete(() {
-      print("$cpf cadastrado com sucesso.");
-    });
+    try {
+      await collectionReference.add(alunos);
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text('Cadastro realizado com sucesso'),
+            actions: [
+              ElevatedButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                child: Text('OK'),
+              ),
+            ],
+          );
+        },
+      );
+    } catch (e) {
+      print('Erro ao cadastrar aluno: $e');
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text('Erro ao cadastrar aluno'),
+            content: Text(
+                'Ocorreu um erro ao cadastrar a aluno. Por favor, tente novamente.'),
+            actions: [
+              ElevatedButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                child: Text('OK'),
+              ),
+            ],
+          );
+        },
+      );
+    }
   }
+
+  var maskFormatter = new MaskTextInputFormatter(
+      mask: '###.###.###-##',
+      filter: {'#': RegExp(r'[0-9]')},
+      type: MaskAutoCompletionType.lazy);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // resizeToAvoidBottomInset: false,
       body: Container(
         color: Colors.white,
         child: Stack(
@@ -66,8 +107,7 @@ class SignupPage extends StatelessWidget {
             ),
             Positioned.fill(
               child: Container(
-                // margin: EdgeInsets.only(top: 170),
-                margin: EdgeInsets.fromLTRB(10, 160, 10, 30),
+                margin: EdgeInsets.only(top: 150),
                 decoration: BoxDecoration(
                   color: Color.fromARGB(255, 255, 255, 255),
                   borderRadius: BorderRadius.all(
@@ -137,7 +177,7 @@ class SignupPage extends StatelessWidget {
                       ),
                       TextFormField(
                         // autofocus: true,
-                        keyboardType: TextInputType.emailAddress,
+                        keyboardType: TextInputType.text,
                         decoration: InputDecoration(
                           labelText: "Nome",
                           prefixIcon: Icon(Icons.people),
@@ -158,6 +198,7 @@ class SignupPage extends StatelessWidget {
                       TextFormField(
                         // autofocus: true,
                         keyboardType: TextInputType.number,
+                        inputFormatters: [maskFormatter],
                         decoration: InputDecoration(
                           labelText: "CPF",
                           prefixIcon: Icon(Icons.card_membership),
@@ -245,7 +286,7 @@ class SignupPage extends StatelessWidget {
                               textAlign: TextAlign.center,
                             ),
                             onPressed: () {
-                              createData();
+                              createData(context);
                             },
                           ),
                         ),
