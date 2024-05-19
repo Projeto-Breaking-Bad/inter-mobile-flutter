@@ -105,6 +105,15 @@ class VacanciesProfile extends StatelessWidget {
         iconTheme: IconThemeData(
           color: Colors.white,
         ),
+        actions: [
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Image.asset(
+              'assets/cacatalentoswhite.png',
+              width: 60, // ajuste o tamanho conforme necessário
+            ),
+          ),
+        ],
       ),
       body: Container(
         color: Colors.white,

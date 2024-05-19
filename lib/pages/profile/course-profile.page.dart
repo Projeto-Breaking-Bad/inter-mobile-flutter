@@ -118,9 +118,9 @@ class _CourseProfileState extends State<CourseProfile> {
   }
 
   var maskHora = new MaskTextInputFormatter(
-    mask: '##:##',
-    filter: {'#': RegExp(r'[0-9]')},
-    type: MaskAutoCompletionType.lazy);
+      mask: '##:##',
+      filter: {'#': RegExp(r'[0-9]')},
+      type: MaskAutoCompletionType.lazy);
 
   @override
   Widget build(BuildContext context) {
@@ -130,6 +130,15 @@ class _CourseProfileState extends State<CourseProfile> {
         iconTheme: IconThemeData(
           color: Colors.white,
         ),
+        actions: [
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Image.asset(
+              'assets/cacatalentoswhite.png',
+              width: 60, // ajuste o tamanho conforme necessário
+            ),
+          ),
+        ],
       ),
       body: Container(
         color: Colors.white,
