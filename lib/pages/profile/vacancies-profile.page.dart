@@ -4,7 +4,11 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:caca_talentos/pages/components/CustomDrawer.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 
-class VacanciesProfileRegister extends StatelessWidget {
+class VacanciesProfile extends StatelessWidget {
+  final String id;
+
+  VacanciesProfile({required this.id});
+
   late String cnpj,
       areaAtuacao,
       horas,
